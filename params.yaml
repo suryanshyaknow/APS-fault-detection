@@ -6,3 +6,11 @@ data_source:
   MongoDB_url: mongodb+srv://suryanshyaknow:streamingdata@sensors-streaming-data.kkw0g1z.mongodb.net/test
   MongoDB_database_name: sensors-streaming-data
   MongoDB_collection_name: APS_sensors
+
+data_ingestion:
+    feature_store_path: ./artifacts/data_ingestion/feature_store/sensors.csv
+    test_size: 0.2
+    training_data_path: ./artifacts/data_ingestion/training_data/training_set.csv
+    test_data_path: ./artifacts/data_ingestion/test_data/test_set.csv
+    random_state: 42
+
