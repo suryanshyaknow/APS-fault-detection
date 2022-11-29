@@ -4,7 +4,7 @@ import sys
 def error_message_detail(error_message, error_detail: sys):
     _, _, exc_tb = error_detail.exc_info()
     file_name = exc_tb.tb_frame.f_code.co_filename
-    error_message = f"Error in {file_name} at line {exc_tb.tb_lineno}: {str(error_message)}."
+    error_message = f'File "{file_name}", line {exc_tb.tb_lineno}: {str(error_message)}.'
     return error_message
 
 
