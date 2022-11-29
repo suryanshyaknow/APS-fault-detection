@@ -1,9 +1,16 @@
+autopep8==2.0.0
 dnspython==2.2.1
+flake8==6.0.0
+mccabe==0.7.0
 numpy==1.23.5
 pandas==1.5.2
+pycodestyle==2.10.0
+pyflakes==3.0.1
 pymongo==4.3.3
 python-dateutil==2.8.2
 pytz==2022.6
+PyYAML==6.0
 six==1.16.0
+tomli==2.0.1
 wincertstore==0.2
 -e .
