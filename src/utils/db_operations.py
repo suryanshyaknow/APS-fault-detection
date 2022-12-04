@@ -19,7 +19,7 @@ class dBOperations:
     collection_name: str = None
 
     def fetch_params(self):
-        """This method fetches the desired params from the congiguration file.
+        """This method fetches the desired params from the configuration file.
         """
         try:
             lg.info("fetching the params from the config file..")
