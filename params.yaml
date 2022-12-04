@@ -3,7 +3,6 @@ base:
   
 data_source:
   raw_data_path: ./aps_failure_training_set1.csv
-  MongoDB_url: mongodb+srv://suryanshyaknow:streamingdata@sensors-streaming-data.kkw0g1z.mongodb.net/test
   MongoDB_database_name: sensors-streaming-data
   MongoDB_collection_name: APS_sensors
 
