@@ -1,5 +1,6 @@
 import yaml
 import os
+from dotenv import load_dotenv
 from src.logger import lg
 from dataclasses import dataclass
 
@@ -10,6 +11,7 @@ class Config:
     Moreover, provides us with a method to read the global params from the provided path of the configuration
     file.
     """
+    load_dotenv()
     mongodb_url:str = os.getenv("MONGO_DB_URL")
     aws_access_key_id:str = os.getenv("AWS_ACCESS_KEY_ID")
     aws_secret_access_key:str = os.getenv("AWS_SECERET_ACCESS_KEY")
