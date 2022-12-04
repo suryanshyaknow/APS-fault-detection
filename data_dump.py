@@ -1,7 +1,7 @@
 import pymongo
 import pandas as pd
 import argparse
-from src.read_params import read_params
+from src.CONFIG import Config
 from src.logger import lg
 import json
 
@@ -12,12 +12,16 @@ class DumpDataToMongoDB:
             lg.info(
                 f"Entered the __init__ method of the {self.__class__.__name__}")
             lg.info("fetching the params from the configuration file..")
-            config = read_params(config_file_path)
+            
+            config = Config()
+            self.connection_url = config.mongodb_url
+            # self.connection_url = "mongodb+srv://suryanshyaknow:streamingdata@sensors-streaming-data.kkw0g1z.mongodb.net/test"
+
+            global_params = config.read_params(config_file_path=config_file_path)
             # fetching the relevants from the configuration file
-            self.data_path = config["data_source"]["raw_data_path"]
-            self.connection_url = config["data_source"]["MongoDB_url"]
-            self.db_name = config["data_source"]["MongoDB_database_name"]
-            self.collection_name = config["data_source"]["MongoDB_collection_name"]
+            self.data_path = global_params["data_source"]["raw_data_path"]
+            self.db_name = global_params["data_source"]["MongoDB_database_name"]
+            self.collection_name = global_params["data_source"]["MongoDB_collection_name"]
             lg.info("params fetched successfully!")
 
             self.client = None

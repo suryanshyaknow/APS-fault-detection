@@ -1,7 +1,7 @@
 import pymongo
 import pandas as pd
 import argparse
-from src.read_params import read_params
+from src.CONFIG import Config
 from src.logger import lg
 import os
 from dataclasses import dataclass
@@ -22,12 +22,15 @@ class dBOperations:
         """This method fetches the desired params from the configuration file.
         """
         try:
-            lg.info("fetching the params from the config file..")
-            config = read_params(self.config_file_path)
-            self.data_path = config["data_source"]["raw_data_path"]
-            self.connection_url = config["data_source"]["MongoDB_url"]
-            self.db_name = config["data_source"]["MongoDB_database_name"]
-            self.collection_name = config["data_source"]["MongoDB_collection_name"]
+            lg.info("fetching the params from the .env and config file..")
+            # Initializing an object of the class Config
+            config = Config()
+            self.connection_url = config.mongodb_url  # from the .env
+            global_params = config.read_params(
+                config_file_path=self.config_file_path)  # params from the config file
+            self.data_path = global_params["data_source"]["raw_data_path"]
+            self.db_name = global_params["data_source"]["MongoDB_database_name"]
+            self.collection_name = global_params["data_source"]["MongoDB_collection_name"]
         except Exception as e:
             lg.exception(e)
         else:
@@ -70,7 +73,7 @@ class dBOperations:
             lg.info(
                 f'"{self.collection_name}" collection in the database "{self.db_name}" selected successfully!')
 
-    def getDataAsDataFrame(self)->pd.DataFrame:
+    def getDataAsDataFrame(self) -> pd.DataFrame:
         """This method returns the sensors-streaming-data as dataframe.
 
         Returns:

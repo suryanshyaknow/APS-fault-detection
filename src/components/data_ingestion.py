@@ -5,26 +5,26 @@ import numpy as np
 import os
 import argparse
 from dataclasses import dataclass
-from src.read_params import read_params
+from src.CONFIG import Config
 from sklearn.model_selection import train_test_split
 
 
 @dataclass
 class DataIngestion:
     lg.info(f'Entered the "{os.path.basename(__file__)}.DataIngestion" class')
-    config_file_path: str
-    feature_store_path: str = None
-    test_size: float = None
-    test_path: str = None
-    training_path: str = None
-    random_state: int = None
+    config_file_path:str
+    feature_store_path:str = None
+    test_size:float = None
+    test_path:str = None
+    training_path:str = None
+    random_state:int = None
 
     def fetch_params(self):
         """This method fetches the desired params from the configuration file.
         """
         try:
             lg.info("fetching the params from the config file..")
-            config = read_params(self.config_file_path)
+            config = Config.read_params(self.config_file_path)
             self.feature_store_path = config["data_ingestion"]["feature_store_path"]
             self.test_size = config["data_ingestion"]["test_size"]
             self.training_path = config["data_ingestion"]["training_data_path"]
@@ -79,4 +79,4 @@ if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--config", default="./params.yaml")
     parse_args = args_parser.parse_args()
-    DataIngestion(config_file_path=parse_args.config)
+    DataIngestion(config_file_path=parse_args.config).initiate()
