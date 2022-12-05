@@ -4,7 +4,7 @@ base:
 data_source:
   raw_data_path: ./aps_failure_training_set1.csv
   MongoDB_database_name: sensors-streaming-data
-  MongoDB_collection_name: APS_sensors
+  MongoDB_collection_name: APS_sensors_burrah
 
 data_ingestion:
     feature_store_path: ./artifacts/data_ingestion/feature_store/sensors.csv

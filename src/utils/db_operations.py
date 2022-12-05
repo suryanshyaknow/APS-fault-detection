@@ -1,7 +1,7 @@
 import pymongo
 import pandas as pd
 import argparse
-from src.CONFIG import Config
+from src.CONFIG import Config, read_params
 from src.logger import lg
 import os
 from dataclasses import dataclass
@@ -22,15 +22,16 @@ class dBOperations:
         """This method fetches the desired params from the configuration file.
         """
         try:
-            lg.info("fetching the params from the .env and config file..")
-            # Initializing an object of the class Config
+            lg.info("fetching the params from .env and config file..")
+            # Reading the params from .env
             config = Config()
-            self.connection_url = config.mongodb_url  # from the .env
-            global_params = config.read_params(
-                config_file_path=self.config_file_path)  # params from the config file
-            self.data_path = global_params["data_source"]["raw_data_path"]
-            self.db_name = global_params["data_source"]["MongoDB_database_name"]
-            self.collection_name = global_params["data_source"]["MongoDB_collection_name"]
+            self.connection_url = config.mongodb_url
+
+            # Reading the paramsn from config file
+            config_params = read_params(config_file_path=self.config_file_path)
+            self.data_path = config_params["data_source"]["raw_data_path"]
+            self.db_name = config_params["data_source"]["MongoDB_database_name"]
+            self.collection_name = config_params["data_source"]["MongoDB_collection_name"]
         except Exception as e:
             lg.exception(e)
         else:

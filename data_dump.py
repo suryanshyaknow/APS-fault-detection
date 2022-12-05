@@ -1,38 +1,44 @@
 import pymongo
 import pandas as pd
 import argparse
-from src.CONFIG import Config
+from src.CONFIG import Config, read_params
 from src.logger import lg
 import json
+import os
+from dataclasses import dataclass
 
 
+@dataclass
 class DumpDataToMongoDB:
-    def __init__(self, config_file_path):
+    lg.info(
+        f'Entered the "{os.path.basename(__file__)}.DumpDataToMongoDB" class')
+    config_file_path: str
+    data_path: str = None
+    client: str = None
+    database_name: str = None
+    database: str = None
+    collection_name: str = None
+    collection: str = None
+
+    def fetch_params(self):
         try:
-            lg.info(
-                f"Entered the __init__ method of the {self.__class__.__name__}")
-            lg.info("fetching the params from the configuration file..")
-            
+            lg.info("fetching the params from .env and the configuration file..")
+            # fecthing params from .env
             config = Config()
             self.connection_url = config.mongodb_url
-            # self.connection_url = "mongodb+srv://suryanshyaknow:streamingdata@sensors-streaming-data.kkw0g1z.mongodb.net/test"
-
-            global_params = config.read_params(config_file_path=config_file_path)
             # fetching the relevants from the configuration file
-            self.data_path = global_params["data_source"]["raw_data_path"]
-            self.db_name = global_params["data_source"]["MongoDB_database_name"]
-            self.collection_name = global_params["data_source"]["MongoDB_collection_name"]
-            lg.info("params fetched successfully!")
-
-            self.client = None
-            self.database = None
-            self.collection = None
-
+            config_params = read_params(config_file_path=self.config_file_path)
+            self.data_path = config_params["data_source"]["raw_data_path"]
+            self.db_name = config_params["data_source"]["MongoDB_database_name"]
+            self.collection_name = config_params["data_source"]["MongoDB_collection_name"]
         except Exception as e:
             lg.exception(e)
+        else:
+            lg.info("params fetched successfully..")
 
     def establishConnectionToMongoDB(self):
         try:
+            self.fetch_params()
             lg.info("Establishing the connection to MongoDB..")
             self.client = pymongo.MongoClient(self.connection_url)
         except Exception as e:
@@ -67,7 +73,7 @@ class DumpDataToMongoDB:
     def dumpData(self):
         try:
             self.createCollection()
-            lg.info("fetching the data from the raw data path..")
+            lg.info("fetching data from the raw data path..")
             df = pd.read_csv(self.data_path)
             lg.info(f"shape of the data: {df.shape}")
             lg.info("data fetched..")

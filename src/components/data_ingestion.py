@@ -5,31 +5,31 @@ import numpy as np
 import os
 import argparse
 from dataclasses import dataclass
-from src.CONFIG import Config
+from src.CONFIG import read_params
 from sklearn.model_selection import train_test_split
 
 
 @dataclass
 class DataIngestion:
     lg.info(f'Entered the "{os.path.basename(__file__)}.DataIngestion" class')
-    config_file_path:str
-    feature_store_path:str = None
-    test_size:float = None
-    test_path:str = None
-    training_path:str = None
-    random_state:int = None
+    config_file_path: str
+    feature_store_path: str = None
+    test_size: float = None
+    test_path: str = None
+    training_path: str = None
+    random_state: int = None
 
     def fetch_params(self):
         """This method fetches the desired params from the configuration file.
         """
         try:
             lg.info("fetching the params from the config file..")
-            config = Config.read_params(self.config_file_path)
-            self.feature_store_path = config["data_ingestion"]["feature_store_path"]
-            self.test_size = config["data_ingestion"]["test_size"]
-            self.training_path = config["data_ingestion"]["training_data_path"]
-            self.test_path = config["data_ingestion"]["test_data_path"]
-            self.random_state = config["data_ingestion"]["random_state"]
+            config_params = read_params(self.config_file_path)
+            self.feature_store_path = config_params["data_ingestion"]["feature_store_path"]
+            self.test_size = config_params["data_ingestion"]["test_size"]
+            self.training_path = config_params["data_ingestion"]["training_data_path"]
+            self.test_path = config_params["data_ingestion"]["test_data_path"]
+            self.random_state = config_params["data_ingestion"]["random_state"]
             ...
         except Exception as e:
             lg.exception(e)
