@@ -37,7 +37,7 @@ class DataIngestionConfig:
         try:
             training_pipeline_config = TrainingPipelineConfig()
             self.data_ingestion_dir = os.path.join(
-                training_pipeline_config.artifact_dir, "data ingestion")
+                training_pipeline_config.artifact_dir, "data_ingestion")
 
             self.feature_store_file_path = os.path.join(
                 self.data_ingestion_dir, FEATURE_STORE_FILE)
@@ -56,7 +56,7 @@ class DataValidationConfig:
         try:
             training_pipeline_config = TrainingPipelineConfig()
             self.data_validation_dir = os.path.join(
-                training_pipeline_config.artifact_dir, "data validation")
+                training_pipeline_config.artifact_dir, "data_validation")
                 
             self.base_file_path = os.path.join(os.getcwd(), RAW_DATA_FILE)
             self.missing_thresh = .3
