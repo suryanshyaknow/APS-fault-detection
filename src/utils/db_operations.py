@@ -61,9 +61,9 @@ class dBOperations:
         try:
             self.selectCollection()
             lg.info(
-                f'reading the data from collection "{self.data_source_config.collection_name}" of database "{self.data_source_config.database_name}"..')
+                f'reading data from the collection "{self.data_source_config.collection_name}" of the database "{self.data_source_config.database_name}"..')
             df = pd.DataFrame(list(self.collection.find()))
-            lg.info("data readied as dataframe!")
+            lg.info("data readied as the dataframe!")
             df.drop(columns=["_id"], inplace=True)
             lg.info(f"Shape of the data: {df.shape}")
         except Exception as e:
