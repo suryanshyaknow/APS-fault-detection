@@ -33,25 +33,35 @@ class TrainingPipelineConfig:
 
 
 class DataIngestionConfig:
-    def __init__(self, training_pipeline_config:TrainingPipelineConfig=TrainingPipelineConfig()) -> None:
+    def __init__(self) -> None:
         try:
-            self.data_ingestion_dir = os.path.join(training_pipeline_config.artifact_dir, "data ingestion") 
-            self.feature_store_file_path = os.path.join(self.data_ingestion_dir, FEATURE_STORE_FILE) 
-            self.training_file_path = os.path.join(self.data_ingestion_dir, TRAINING_FILE)
-            self.test_file_path = os.path.join(self.data_ingestion_dir, TEST_FILE)
+            training_pipeline_config = TrainingPipelineConfig()
+            self.data_ingestion_dir = os.path.join(
+                training_pipeline_config.artifact_dir, "data ingestion")
+
+            self.feature_store_file_path = os.path.join(
+                self.data_ingestion_dir, FEATURE_STORE_FILE)
+            self.training_file_path = os.path.join(
+                self.data_ingestion_dir, TRAINING_FILE)
+            self.test_file_path = os.path.join(
+                self.data_ingestion_dir, TEST_FILE)
             self.test_size = 0.2
             self.random_state = 42
         except Exception as e:
             lg.exception(e)
 
 
-class Datavalidation:
-    def __init__(self, training_pipeline_config:TrainingPipelineConfig) -> None:
+class DataValidationConfig:
+    def __init__(self) -> None:
         try:
-            self.data_validation_dir = os.path.joijn(training_pipeline_config.artifact_dir, "data validation")
+            training_pipeline_config = TrainingPipelineConfig()
+            self.data_validation_dir = os.path.join(
+                training_pipeline_config.artifact_dir, "data validation")
+                
             self.base_file_path = os.path.join(os.getcwd(), RAW_DATA_FILE)
             self.missing_thresh = .3
-            self.report_file_path = os.path.join(self.data_validation_dir, "report.yaml")
+            self.report_file_path = os.path.join(
+                self.data_validation_dir, "report.yaml")
             ...
         except Exception as e:
-            lg.exception(e)    
+            lg.exception(e)

@@ -11,10 +11,11 @@ from sklearn.model_selection import train_test_split
 
 @dataclass
 class DataIngestion:
-    lg.info(f"{'='*22} DATA INGESTION {'='*35}")
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.DataIngestion" class')
-    data_ingestion_config = DataIngestionConfig()
+
+    data_ingestion_config: DataIngestionConfig
+
     feature_store_path: str = None
     test_size: float = None
     test_path: str = None
@@ -23,6 +24,8 @@ class DataIngestion:
 
     def initiate(self) -> DataIngestionArtifact:
         try:
+            lg.info(f"{'='*22} DATA INGESTION {'='*35}")
+
             # Readying the "sensors" dataframe
             lg.info('Exporting the "sensors" data as pandas dataframe..')
             df: pd.DataFrame = dBOperations().getDataAsDataFrame()
