@@ -105,8 +105,8 @@ class DataValidation:
 
             drift_report = {}
 
-            ##################### Separating Columns ##########################################################
-            base_num_cols, base_cat_cols = BasicUtils.separate_numerical_and_categorical_columns(
+            ##################### Separating Numerical and Categorical Columns ################################
+            base_num_cols, base_cat_cols = BasicUtils.get_numerical_and_categorical_attributes(
                 base_df, desc="Base")
 
             ##################### DRIFT CHECK for Numerical Columns ###########################################

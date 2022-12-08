@@ -2,6 +2,7 @@ import yaml
 from src.logger import lg
 import os
 import pandas as pd
+import numpy as np
 from typing import List, Tuple
 
 
@@ -36,12 +37,12 @@ class BasicUtils:
             lg.exception(e)
 
     @classmethod
-    def separate_numerical_and_categorical_columns(cls, df: pd.DataFrame, desc: str):
-        """This method separates the Numerical and Categorical columns based on the each column datatype
-        and return them as a tuple of respective columns.
+    def get_numerical_and_categorical_attributes(cls, df: pd.DataFrame, desc: str):
+        """This method returns the Numerical and Categorical attribtes names based on the each column datatype
+        and return them as a tuple of respective attributes.
 
         Args:
-            df (pd.DataFrame): Dataframe whose columns have to be separated out.
+            df (pd.DataFrame): Dataframe whose attributes gotta be fetched.
             desc (str): Description of the said dataframe.
 
         Returns:
@@ -50,11 +51,11 @@ class BasicUtils:
         """
         try:
             lg.info(
-                f'separating out the Numerical and Categorical columns from the "{desc}" dataframe..')
+                f'fetching the Numerical and Categorical attributes names from the "{desc}" dataframe..')
             num_cols = [col for col in df.columns if df[col].dtypes != 'O']
             cat_cols = [col for col in df.columns if df[col].dtypes == 'O']
 
-            lg.info("columns have been separated out successfully!")
+            lg.info("attributes fetched successfully!")
             return num_cols, cat_cols
             ...
         except Exception as e:
@@ -71,7 +72,8 @@ class BasicUtils:
             desc (str): Description of the said dataframe.
 
         Returns:
-            Tuple: Tuple of features pandas dataframe and labels pandas dataframe respectively.
+            Tuple (pd.DataFrame, pd.DataFrame): Tuple of features pandas dataframe and labels pandas 
+            dataframe respectively.
         """
         try:
             lg.info(
@@ -81,6 +83,27 @@ class BasicUtils:
 
             lg.info("returning the said input features and dependent labels..")
             return features, labels
+            ...
+        except Exception as e:
+            lg.exception(e)
+
+    @classmethod
+    def save_numpy_array(cls, file_path: str, arr: np.array, desc: str):
+        """Saves the numpy array ath the desired `file_path` location.
+
+        Args:
+            file_path (str): Location where the numpy array is to be stored.
+            arr (np.array): Numpy array which is to be stored.
+            desc (str): Description of the numpy array.
+        """
+        try:
+            lg.info(f'Saving the "{desc} Array" at "{file_path}"..')
+            # Making sure the dir do exist
+            dir = os.path.dirname(file_path)
+            os.makedirs(dir, exist_ok=True)
+            with open(file_path, "wb") as f:
+                np.save(f, arr)
+            lg.info(f'"{desc} array" saved successfully!')
             ...
         except Exception as e:
             lg.exception(e)
