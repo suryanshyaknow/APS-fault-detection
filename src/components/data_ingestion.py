@@ -15,11 +15,6 @@ class DataIngestion:
         f'Entered the "{os.path.basename(__file__)[:-3]}.DataIngestion" class')
 
     data_ingestion_config = DataIngestionConfig()
-    feature_store_path: str = None
-    test_size: float = None
-    test_path: str = None
-    training_path: str = None
-    random_state: int = None
 
     def initiate(self) -> DataIngestionArtifact:
         try:
