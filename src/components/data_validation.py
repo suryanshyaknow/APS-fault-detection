@@ -15,8 +15,8 @@ class DataValidation:
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.DataValidation" class')
 
-    data_validation_config: DataValidationConfig
     data_ingestion_artifact: DataIngestionArtifact
+    data_validation_config =  DataValidationConfig()
     validation_report = dict()
 
     def drop_redundant_columns(self, df: pd.DataFrame, missing_thresh: float, report_key: str) -> Optional[pd.DataFrame]:
@@ -119,7 +119,7 @@ class DataValidation:
                 kstest_result = ks_2samp(base_dist, current_dist)
 
                 lg.info(
-                    f'Null Hypothesis: "{col}" from "Base" dataframe and "{col}" from "{current_df_desc}" dataframe are drawn from the same distribution.')
+                    f'Null Hypothesis: "{col}" from the `Base dataframe` and "{col}" from the `{current_df_desc} dataframe` are drawn from the same distribution.')
                 if kstest_result.pvalue > .05:
                     lg.info("Null hypothesis is to be accepted!")
                     drift_report[col] = {

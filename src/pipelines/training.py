@@ -10,19 +10,16 @@ from src.components.data_validation import DataValidation
 class TrainingPipeline:
     lg.info("Training Pipeline begins now..")
     lg.info(f"Entered the {os.path.basename(__file__)[:-3]}.TrainingPipeline")
-    data_ingestion_config: DataIngestionConfig
-    data_validation_config: DataValidationConfig
 
     def begin(self):
         try:
             ######################### DATA INGESTION ####################################
-            ingestion = DataIngestion(
-                data_ingestion_config=self.data_ingestion_config)
+            ingestion = DataIngestion()
             ingestion_artifact = ingestion.initiate()
 
             ######################### DATA VALIDATION ####################################
             validation = DataValidation(
-                data_validation_config=self.data_validation_config, data_ingestion_artifact=ingestion_artifact)
+                data_ingestion_artifact=ingestion_artifact)
             validation_artifact = validation.initiate()
 
             ...
@@ -31,6 +28,5 @@ class TrainingPipeline:
 
 
 if __name__ == "__main__":
-    training_pipeline = TrainingPipeline(
-        data_ingestion_config=DataIngestionConfig(), data_validation_config=DataValidationConfig())
+    training_pipeline = TrainingPipeline()
     training_pipeline.begin()

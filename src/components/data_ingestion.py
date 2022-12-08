@@ -14,8 +14,7 @@ class DataIngestion:
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.DataIngestion" class')
 
-    data_ingestion_config: DataIngestionConfig
-
+    data_ingestion_config = DataIngestionConfig()
     feature_store_path: str = None
     test_size: float = None
     test_path: str = None
@@ -26,7 +25,7 @@ class DataIngestion:
         try:
             lg.info(f"{'='*22} DATA INGESTION {'='*35}")
 
-            ######################## Readying the "Sensors" dataframe ##########################################
+            ######################## Readying the "sensors" dataframe ##########################################
             lg.info('Exporting the "sensors" data as pandas dataframe..')
             df: pd.DataFrame = dBOperations().getDataAsDataFrame()
             lg.info("dataframe fetched!")
@@ -41,7 +40,7 @@ class DataIngestion:
                 path_or_buf=self.data_ingestion_config.feature_store_file_path, index=None)
             lg.info('"sensors" dataframe exported successfully!')
 
-            ######################## TRAIN-TEST split ##########################################################
+            ######################## TRAINING-TEST SPLIT ########################################################
             lg.info('Splitting the data into training and test subsets..')
             training_set, test_set = train_test_split(
                 df, test_size=self.data_ingestion_config.test_size, random_state=self.data_ingestion_config.random_state)
@@ -61,7 +60,7 @@ class DataIngestion:
                 path_or_buf=self.data_ingestion_config.training_file_path, index=None)
             lg.info("test and training subsets saved succesfully!")
             
-            ###################### Saving ARTIFACTS Config #####################################################
+            ###################### Saving Artifacts Config ######################################################
             data_ingestion_artifact = DataIngestionArtifact(
                 feature_store_file=self.data_ingestion_config.feature_store_file_path,
                 training_file_path=self.data_ingestion_config.training_file_path,
@@ -73,7 +72,3 @@ class DataIngestion:
             ...
         except Exception as e:
             lg.exception(e)
-
-
-if __name__ == "__main__":
-    DataIngestion().initiate()
