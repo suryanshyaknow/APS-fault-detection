@@ -4,6 +4,7 @@ import os
 from src.entities.config import DataIngestionConfig, DataValidationConfig
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
+from src.components.data_transformation import DataTransformation
 
 
 @dataclass
@@ -13,7 +14,7 @@ class TrainingPipeline:
 
     def begin(self):
         try:
-            ######################### DATA INGESTION ####################################
+            ######################### DATA INGESTION #####################################
             ingestion = DataIngestion()
             ingestion_artifact = ingestion.initiate()
 
@@ -21,6 +22,11 @@ class TrainingPipeline:
             validation = DataValidation(
                 data_ingestion_artifact=ingestion_artifact)
             validation_artifact = validation.initiate()
+
+            ######################### DATA TRANSFORMATION ################################
+            transformation = DataTransformation(
+                data_ingestion_artifact=ingestion_artifact)
+            transformation_artifact = transformation.initiate()
 
             ...
         except Exception as e:

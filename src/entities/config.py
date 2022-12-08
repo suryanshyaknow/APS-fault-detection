@@ -5,9 +5,10 @@ from dataclasses import dataclass
 
 
 RAW_DATA_FILE = "aps_failure_training_set1.csv"
-FEATURE_STORE_FILE = "sensors_feature_store.csv"
+FEATURE_STORE_FILE = "sensors.csv"
 TRAINING_FILE = "training_set.csv"
 TEST_FILE = "test_set.csv"
+TRANSFORMER_PIPELINE = "transformer_pipeline.pkl"
 
 
 @dataclass
@@ -57,11 +58,28 @@ class DataValidationConfig:
             training_pipeline_config = TrainingPipelineConfig()
             self.data_validation_dir = os.path.join(
                 training_pipeline_config.artifact_dir, "data_validation")
-                
+
             self.base_file_path = os.path.join(os.getcwd(), RAW_DATA_FILE)
             self.missing_thresh = .3
             self.report_file_path = os.path.join(
                 self.data_validation_dir, "report.yaml")
+            ...
+        except Exception as e:
+            lg.exception(e)
+
+
+class DataTransformationConfig:
+    def __init__(self) -> None:
+        try:
+            training_pipeline_config = TrainingPipelineConfig()
+            self.data_transformation_dir = os.path.join(
+                training_pipeline_config.artifact_dir, "data_transformation")
+
+            self.transformer_path = os.path.join(self.data_transformation_dir, "transformer", TRANSFORMER_PIPELINE)
+            self.transformed_training_file_path = os.path.join(
+                self.data_transformation_dir, TRAINING_FILE.replace(".csv", ".npz"))
+            self.transformed_test_file_path = os.path.join(
+                self.data_transformation_dir, TEST_FILE.replace(".csv", ".npz"))
             ...
         except Exception as e:
             lg.exception(e)
