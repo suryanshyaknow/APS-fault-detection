@@ -17,7 +17,6 @@ class DataValidation:
 
     data_validation_config: DataValidationConfig
     data_ingestion_artifact: DataIngestionArtifact
-    basic_utils = BasicUtils()
     validation_report = dict()
 
     def drop_redundant_columns(self, df: pd.DataFrame, missing_thresh: float, report_key: str) -> Optional[pd.DataFrame]:
@@ -84,28 +83,32 @@ class DataValidation:
             return True
             ...
         except Exception as e:
-            lg.exception(e)        
+            lg.exception(e)
 
-    def data_drift_check(self, base_df: pd.DataFrame, current_df: pd.DataFrame, report_key: str) -> None:
+    def data_drift_check(self, base_df: pd.DataFrame, current_df: pd.DataFrame, current_df_desc: str, report_key: str) -> None:
         """Performs "data drift" check by validating if the distributions of both base dataframe and present 
         dataframe are drawn from a single distribution by assuming Null Hypothesis as in they are indeed drawn 
         from the same distribution.
 
         Args:
             base_df (pd.DataFrame): Reference Dataframe
-            current_df (pd.DataFrame): Dataframe on which data drift check has to be done.
+            current_df_desc (pd.DataFrame): Dataframe on which data drift check has to be done.
+            current_desc (str): Description of the said `Current Dataframe`.
             report_key (str): Key name for holding missing columns in the validation report.
         """
         try:
             ##################### Configuring Columns' datatypes ##############################################
-            base_df = self.basic_utils.configure_float_columns(base_df, exclude_columns=["class"])
-            current_df = self.basic_utils.configure_float_columns(current_df, exclude_columns=["class"])
+            base_df = BasicUtils.configure_float_columns(
+                base_df, exclude_columns=["class"], desc="Base")
+            current_df = BasicUtils.configure_float_columns(
+                current_df, exclude_columns=["class"], desc=current_df_desc)
 
             drift_report = {}
 
-            ##################### Separating Columns ##########################################################    
-            base_num_cols, base_cat_cols = self.basic_utils.separate_numerical_and_categorical_columns(base_df)
-            
+            ##################### Separating Columns ##########################################################
+            base_num_cols, base_cat_cols = BasicUtils.separate_numerical_and_categorical_columns(
+                base_df, desc="Base")
+
             ##################### DRIFT CHECK for Numerical Columns ###########################################
             lg.info(
                 'Performing "Data Drift Check" for "Numerical Columns" by validating if the distributions of both base dataframe and present dataframe are drawn from a single distribution..'
@@ -114,8 +117,9 @@ class DataValidation:
             for col in base_num_cols:
                 base_dist, current_dist = base_df[col], current_df[col]
                 kstest_result = ks_2samp(base_dist, current_dist)
-                
-                lg.info(f'Null Hypothesis: "{col}" from base_df and "{col}" from current_df are drawn from the same distribution.')
+
+                lg.info(
+                    f'Null Hypothesis: "{col}" from "Base" dataframe and "{col}" from "{current_df_desc}" dataframe are drawn from the same distribution.')
                 if kstest_result.pvalue > .05:
                     lg.info("Null hypothesis is to be accepted!")
                     drift_report[col] = {
@@ -123,7 +127,7 @@ class DataValidation:
                         "same_distribution": True
                     }
                 else:
-                    
+
                     lg.info("Null hypothesis is to be rejected!")
                     drift_report[col] = {
                         "pvalue": float(kstest_result.pvalue),
@@ -142,7 +146,7 @@ class DataValidation:
                     drift_report[col] = {
                         "same_categories": False
                     }
-            
+
             ##################### Drift Report -> Validation Report ############################################
             self.validation_report[report_key] = drift_report
             ...
@@ -163,7 +167,8 @@ class DataValidation:
                 report_key="dropped_columns_from_base_data")
 
             lg.info("fetching Training dataframe..")
-            train_df = pd.read_csv(self.data_ingestion_artifact.training_file_path)
+            train_df = pd.read_csv(
+                self.data_ingestion_artifact.training_file_path)
             lg.info("dropping columns from the training data..")
             train_df = self.drop_redundant_columns(
                 train_df, missing_thresh=self.data_validation_config.missing_thresh,
@@ -177,30 +182,34 @@ class DataValidation:
                 report_key="dropped_columns_from_test_data"
             )
 
-            ############################ REQUIRED COLUMN CHECK ###############################################
+            ############################ REQUIRED COLUMNS CHECK ###############################################
             lg.info('"Required Columns Check" for the training dataset..')
             train_columns_status = self.required_columns_check(
                 base_df, train_df, "missing_columns_in_training_data")
             lg.info('"Required Columns Check" for the test dataset..')
             test_columns_status = self.required_columns_check(
                 base_df, test_df, "missing_columns_in_test_data")
-            # If the "Required Column Check" for the given dataset passes then only, 
+            # If the "Required Column Check" for the given dataset passes then only,
             # "Data Drift Check" can be performed.
             if train_columns_status:
-                lg.info("Since all required columns are there in the training set, now going for the \"Data Drift Check\"..")
-                self.data_drift_check(base_df, train_df, "data_drift_within_training_data")
+                lg.info(
+                    "Since all required columns are there in the training set, now going for the \"Data Drift Check\"..")
+                self.data_drift_check(
+                    base_df, train_df, current_df_desc="Training", report_key="data_drift_within_training_data")
             if test_columns_status:
-                lg.info("Since all required columns are there in the test set, now going for the \"Data Drift Check\"..")
-                self.data_drift_check(base_df, test_df, "data_drift_within_test_data")
+                lg.info(
+                    "Since all required columns are there in the test set, now going for the \"Data Drift Check\"..")
+                self.data_drift_check(
+                    base_df, test_df, current_df_desc="Test", report_key="data_drift_within_test_data")
 
-            ###################### Dumping VALIDATION REPORT into a YAML file ###############################
+            ###################### Dumping VALIDATION REPORT into a YAML file ################################
             lg.info("Dumping Validation Report inside yaml file..")
-            self.basic_utils.write_yaml_file(
-                file_path=self.data_validation_config.report_file_path, 
+            BasicUtils.write_yaml_file(
+                file_path=self.data_validation_config.report_file_path,
                 data=self.validation_report,
                 desc="Validation Report")
 
-            ###################### Saving ARTIFACTS Config ##################################################
+            ###################### Saving Artifacts Config ###################################################
             data_validation_artifact = DataValidationArtifact(
                 report_file_path=self.data_validation_config.report_file_path
             )
