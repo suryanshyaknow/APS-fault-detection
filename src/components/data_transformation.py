@@ -62,7 +62,7 @@ class DataTransformation:
 
     def initiate(self):
         try:
-            lg.info(f"{'='*22} DATA TRANSFORMATION {'='*35}")
+            lg.info(f"\n{'='*27} DATA TRANSFORMATION {'='*40}")
 
             ################## Fetch the Training and Test datasets ############################################
             lg.info("fetching the training and test sets for transformation..")

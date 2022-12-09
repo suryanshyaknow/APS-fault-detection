@@ -35,7 +35,7 @@ class ModelTraining:
 
     def initiate(self) -> ModelTrainingArtifact:
         try:
-            lg.info(f"\n{'='*22} MODEL TRAINING {'='*35}")
+            lg.info(f"\n{'='*27} MODEL TRAINING {'='*40}")
 
             ######################## Fetch the Training and Test arrays #######################################
             lg.info("fetching the transformed training and test arrays..")

@@ -155,7 +155,7 @@ class DataValidation:
 
     def initiate(self) -> DataValidationArtifact:
         try:
-            lg.info(f"{'='*22} DATA VALIDATION {'='*35}")
+            lg.info(f"\n{'='*27} DATA VALIDATION {'='*40}")
 
             lg.info("fetching Base dataframe..")
             base_df = pd.read_csv(self.data_validation_config.base_file_path)

@@ -18,7 +18,7 @@ class DataIngestion:
 
     def initiate(self) -> DataIngestionArtifact:
         try:
-            lg.info(f"{'='*22} DATA INGESTION {'='*35}")
+            lg.info(f"\n{'='*27} DATA INGESTION {'='*40}")
 
             ######################## Readying the "sensors" dataframe ##########################################
             lg.info('Exporting the "sensors" data as pandas dataframe..')
