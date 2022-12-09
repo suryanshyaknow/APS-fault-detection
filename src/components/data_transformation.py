@@ -62,7 +62,7 @@ class DataTransformation:
 
     def initiate(self):
         try:
-            lg.info(f"{'='*22} DATA INGESTION {'='*35}")
+            lg.info(f"{'='*22} DATA TRANSFORMATION {'='*35}")
 
             ################## Fetch the Training and Test datasets ############################################
             lg.info("fetching the training and test sets for transformation..")
@@ -83,7 +83,7 @@ class DataTransformation:
                 num_atts=num_atts, cat_atts=cat_atts)
             transformation_pipline.fit(training_set)
             lg.info("Transformation Pipeline fitted successfully!")
-            
+
             # Transformation of Training set
             lg.info('Transforming Training set..')
             training_set_transformed = pd.DataFrame(
@@ -94,6 +94,12 @@ class DataTransformation:
             test_set_transformed = pd.DataFrame(
                 transformation_pipline.transform(test_set), columns=num_atts+cat_atts)
             lg.info("Test set transformed successfully..")
+
+            ########################## Save the Transformer ####################################################
+            BasicUtils.save_object(
+                file_path=self.data_transformation_config.transformer_path,
+                obj=transformation_pipline,
+                obj_desc="transformer pipeline")
 
             ################## Resampling of Data Instances ####################################################
             # Separate out features and target for resampling
@@ -148,6 +154,8 @@ class DataTransformation:
                 transformed_training_file_path=self.data_transformation_config.transformed_training_file_path,
                 transformed_test_file_path=self.data_transformation_config.transformed_test_file_path
             )
+            lg.info(f"Transformation Artifact: {transformation_artifact}")
+            lg.info("Data Transformation completed!")
 
             return transformation_artifact
             ...

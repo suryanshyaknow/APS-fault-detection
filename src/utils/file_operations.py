@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 from typing import List, Tuple
+import dill
 
 
 class BasicUtils:
@@ -104,6 +105,38 @@ class BasicUtils:
             with open(file_path, "wb") as f:
                 np.save(f, arr)
             lg.info(f'"{desc} array" saved successfully!')
+            ...
+        except Exception as e:
+            lg.exception(e)
+
+    @classmethod
+    def save_object(cls, file_path: str, obj: object, obj_desc: str) -> None:
+        """Saves the desired object at the said desired location.
+
+        Args:
+            file_path (str): Location where the object is to be stored.
+            obj (object): Object that is to be stored.
+            obj_desc (str): Object's description.
+        """
+        try:
+            lg.info(f'Saving the "{obj_desc}" at "{file_path}"..')
+            obj_dir = os.path.dirname(file_path)
+            os.makedirs(obj_dir, exist_ok=True)
+            dill.dump(obj, open(file_path, 'wb'))
+            lg.info(f'"{obj_desc}" saved successfully!')
+            ...
+        except Exception as e:
+            lg.exception(e)
+
+    @classmethod
+    def load_object(cls, file_path: str, obj_desc: str) -> object:
+        try:
+            lg.info(f'Loading the {obj_desc}..')
+            if not os.path.exists(file_path):
+                lg.error('Uh Oh! Looks like the said file path or the object doesn\'t even exist!')
+            else:
+                dill.load(open(file_path, 'rb'))
+                lg.info(f'{obj_desc} loaded successfully!')
             ...
         except Exception as e:
             lg.exception(e)
