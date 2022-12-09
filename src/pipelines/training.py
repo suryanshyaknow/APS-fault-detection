@@ -23,7 +23,7 @@ class TrainingPipeline:
             #     data_ingestion_artifact=ingestion_artifact)
             # validation_artifact = validation.initiate()
 
-            ######################### DATA TRANSFORMATION ################################
+            # ######################### DATA TRANSFORMATION ################################
             transformation = DataTransformation(
                 data_ingestion_artifact=ingestion_artifact)
             transformation_artifact = transformation.initiate()
