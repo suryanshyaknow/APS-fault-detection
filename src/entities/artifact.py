@@ -21,8 +21,10 @@ class DataTransformationArtifact:
 
 
 @dataclass
-class ModelTrainerArtifact:
-    ...
+class ModelTrainingArtifact:
+    model_path: str
+    f1_training_score: float
+    f1_test_score: float
 
 
 @dataclass

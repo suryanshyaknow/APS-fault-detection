@@ -90,7 +90,7 @@ class BasicUtils:
 
     @classmethod
     def save_numpy_array(cls, file_path: str, arr: np.array, desc: str):
-        """Saves the numpy array ath the desired `file_path` location.
+        """Saves the numpy array at the desired `file_path` location.
 
         Args:
             file_path (str): Location where the numpy array is to be stored.
@@ -105,6 +105,26 @@ class BasicUtils:
             with open(file_path, "wb") as f:
                 np.save(f, arr)
             lg.info(f'"{desc} array" saved successfully!')
+            ...
+        except Exception as e:
+            lg.exception(e)
+
+    @classmethod
+    def load_numpy_array(cls, file_path: str, desc: str):
+        """Loads the desried numpy array from the desired `file_path` location.
+
+        Args:
+            file_path (str): Location from where the numpy array is to be fetched.
+            desc (str): Description of the numpy array.
+        """
+        try:
+            lg.info(f'Loading the "{desc} Array" from "{file_path}"..')
+
+            if not os.path.exists(file_path):
+                lg.error('Uh Oh! Looks like the said file path or the numpy array doesn\'t even exist!')
+            else:
+                lg.info(f'"{desc} Array" loaded successsfully!')
+                return np.load(open(file_path, 'rb'))
             ...
         except Exception as e:
             lg.exception(e)
@@ -135,8 +155,8 @@ class BasicUtils:
             if not os.path.exists(file_path):
                 lg.error('Uh Oh! Looks like the said file path or the object doesn\'t even exist!')
             else:
-                dill.load(open(file_path, 'rb'))
                 lg.info(f'{obj_desc} loaded successfully!')
+                return dill.load(open(file_path, 'rb')) 
             ...
         except Exception as e:
             lg.exception(e)

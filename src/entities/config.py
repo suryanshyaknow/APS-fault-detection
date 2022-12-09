@@ -9,6 +9,7 @@ FEATURE_STORE_FILE = "sensors.csv"
 TRAINING_FILE = "training_set.csv"
 TEST_FILE = "test_set.csv"
 TRANSFORMER_PIPELINE = "transformer_pipeline.pkl"
+MODEL_FILE = "model.pkl"
 
 
 @dataclass
@@ -80,6 +81,21 @@ class DataTransformationConfig:
                 self.data_transformation_dir, TRAINING_FILE.replace(".csv", ".npz"))
             self.transformed_test_file_path = os.path.join(
                 self.data_transformation_dir, TEST_FILE.replace(".csv", ".npz"))
+            ...
+        except Exception as e:
+            lg.exception(e)
+
+
+class ModelTrainingConfig:
+    def __init__(self) -> None:
+        try:
+            training_pipeline_config = TrainingPipelineConfig()
+            self.model_training_dir = os.path.join(
+                training_pipeline_config.artifact_dir, "model_training")
+
+            self.model_path = os.path.join(self.model_training_dir, "model", MODEL_FILE)
+            self.expected_score = .85
+            self.overfit_thresh = .1
             ...
         except Exception as e:
             lg.exception(e)
