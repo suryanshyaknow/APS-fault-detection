@@ -56,7 +56,7 @@ class ModelRegistryConfig:
         """Returns the path of the latest `model` dir of the Model Registry.
 
         Returns:
-            _type_: Latest Model dir path of the Model Registry.
+            str: Latest Model dir path of the Model Registry.
         """
         try:
             latest_dir = self.get_latest_dir_path()
@@ -73,7 +73,7 @@ class ModelRegistryConfig:
         """Returns the path of the latest `transformer` dir of the Model Registry.
 
         Returns:
-            _type_: Latest Transformer dir path of the Model Registry.
+            str: Latest Transformer dir path of the Model Registry.
         """
         try:
             latest_dir = self.get_latest_dir_path()

@@ -99,3 +99,8 @@ class ModelTrainingConfig:
             ...
         except Exception as e:
             lg.exception(e)
+
+
+@dataclass
+class ModelEvaluationConfig:
+    replace_model_thresh = 0.01

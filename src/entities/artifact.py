@@ -29,6 +29,8 @@ class ModelTrainingArtifact:
 
 @dataclass
 class ModelEvaluationArtifact:
+    is_model_replaced: bool
+    improved_accuracy: float
     ...
 
 
