@@ -8,7 +8,8 @@ RAW_DATA_FILE = "aps_failure_training_set1.csv"
 FEATURE_STORE_FILE = "sensors.csv"
 TRAINING_FILE = "training_set.csv"
 TEST_FILE = "test_set.csv"
-TRANSFORMER_PIPELINE = "transformer_pipeline.pkl"
+TRANSFORMER = "transformer.pkl"
+TARGET_ENCODER = "target_encoder.pkl"
 MODEL_FILE = "model.pkl"
 
 
@@ -76,10 +77,16 @@ class DataTransformationConfig:
             self.data_transformation_dir = os.path.join(
                 training_pipeline_config.artifact_dir, "data_transformation")
 
+            # Transformer path
             self.transformer_path = os.path.join(
-                self.data_transformation_dir, "transformer", TRANSFORMER_PIPELINE)
+                self.data_transformation_dir, "transformer", TRANSFORMER)
+            # Target Encoder path
+            self.target_encoder_path = os.path.join(
+                self.data_transformation_dir, "encoder", TARGET_ENCODER)
+            # Transformed Training set path
             self.transformed_training_file_path = os.path.join(
                 self.data_transformation_dir, TRAINING_FILE.replace(".csv", ".npz"))
+            # Transformed Test set path
             self.transformed_test_file_path = os.path.join(
                 self.data_transformation_dir, TEST_FILE.replace(".csv", ".npz"))
             ...
@@ -119,9 +126,11 @@ class ModelPushingConfig:
             training_pipeline_config = TrainingPipelineConfig()
             self.model_pushing_dir = os.path.join(
                 training_pipeline_config.artifact_dir, "model_pushing", "saved_models")
-                
-            self.to_be_pushed_model_path = os.path.join(self.model_pushing_dir, MODEL_FILE)
-            self.to_be_pushed_transformer_path = os.path.join(self.model_pushing_dir, TRANSFORMER_PIPELINE)
+
+            self.to_be_pushed_model_path = os.path.join(
+                self.model_pushing_dir, MODEL_FILE)
+            self.to_be_pushed_transformer_path = os.path.join(
+                self.model_pushing_dir, TRANSFORMER)
             ...
         except Exception as e:
             lg.exception(e)
