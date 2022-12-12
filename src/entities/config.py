@@ -131,6 +131,8 @@ class ModelPushingConfig:
                 self.model_pushing_dir, MODEL_FILE)
             self.to_be_pushed_transformer_path = os.path.join(
                 self.model_pushing_dir, TRANSFORMER)
+            self.to_be_pushed_target_encoder_path = os.path.join(
+                self.model_pushing_dir, TARGET_ENCODER)
             ...
         except Exception as e:
             lg.exception(e)
