@@ -151,11 +151,11 @@ class BasicUtils:
     @classmethod
     def load_object(cls, file_path: str, obj_desc: str) -> object:
         try:
-            lg.info(f'Loading the {obj_desc}..')
+            lg.info(f'Loading the "{obj_desc}"..')
             if not os.path.exists(file_path):
                 lg.error('Uh Oh! Looks like the said file path or the object doesn\'t even exist!')
             else:
-                lg.info(f'{obj_desc} loaded successfully!')
+                lg.info(f'"{obj_desc}" loaded successfully!')
                 return dill.load(open(file_path, 'rb')) 
             ...
         except Exception as e:

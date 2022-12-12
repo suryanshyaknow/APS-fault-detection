@@ -88,12 +88,12 @@ class DataTransformation:
             lg.info('Transforming Training set..')
             training_set_transformed = pd.DataFrame(
                 transformation_pipline.transform(training_set), columns=num_atts+cat_atts)
-            lg.info("Training set transformed successfully..")
+            lg.info("Training set transformed successfully!")
             # Transformation of Test set
             lg.info('Transforming Test set..')
             test_set_transformed = pd.DataFrame(
                 transformation_pipline.transform(test_set), columns=num_atts+cat_atts)
-            lg.info("Test set transformed successfully..")
+            lg.info("Test set transformed successfully!")
 
             ########################## Save the Transformer ####################################################
             BasicUtils.save_object(

@@ -37,9 +37,10 @@ class ModelRegistryConfig:
             Optional[str]: Path of the latest dir of Model Registry.
         """
         try:
+            lg.info("Getting the `latest dir path` from the Model Registry..")
             dirs = os.listdir(self.model_registry)
             if len(dirs) == 0:
-                lg.error(
+                lg.warning(
                     "As of now there are no such directories in the Model Registry!")
                 return None
 
@@ -60,6 +61,7 @@ class ModelRegistryConfig:
         """
         try:
             latest_dir = self.get_latest_dir_path()
+            lg.info("Getting the `latest model path` from the Model Registry..")
             if latest_dir is None:
                 lg.exception(
                     "Even the dir doesn't exist and you are expecting a model, shame!")
@@ -77,6 +79,7 @@ class ModelRegistryConfig:
         """
         try:
             latest_dir = self.get_latest_dir_path()
+            lg.info("Getting the `latest transformer path` from the Model Registry..")
             if latest_dir is None:
                 lg.exception(
                     "Even the dir doesn't exist and you are expecting a transformer, shame!")
@@ -94,23 +97,12 @@ class ModelRegistryConfig:
         """
         try:
             latest_dir = self.get_latest_dir_path()
+            lg.info("Configuring the dir path where the `latest artifacts` are to be saved..")
+
             if latest_dir is None:
                 return os.path.join(self.model_registry, str(0))
             latest_dir_num = int(os.path.basename(latest_dir))
             return os.path.join(self.model_registry, str(latest_dir_num+1))
-            ...
-        except Exception as e:
-            lg.exception(e)
-
-    def save_latest_model_at(self) -> str:
-        """Dir path in the Model Registry to save the latest Model at.
-
-        Returns:
-            str: Dir path where the latest Model is to be stored.
-        """
-        try:
-            latest_dir_to_save = self.get_latest_dir_path_to_save()
-            return os.path.join(latest_dir_to_save, self.model_dir, MODEL_FILE)
             ...
         except Exception as e:
             lg.exception(e)
@@ -123,7 +115,23 @@ class ModelRegistryConfig:
         """
         try:
             latest_dir_to_save = self.get_latest_dir_path_to_save()
+            lg.info("Configuring the path where the `latestly built Transformer Pipeline` is to be stored..")
             return os.path.join(latest_dir_to_save, self.transformer_dir, TRANSFORMER_PIPELINE)
             ...
         except Exception as e:
             lg.exception(e)
+
+    def save_latest_model_at(self) -> str:
+        """Dir path in the Model Registry to save the latest Model at.
+
+        Returns:
+            str: Dir path where the latest Model is to be stored.
+        """
+        try:
+            latest_dir = self.get_latest_dir_path()
+            lg.info("Configuring the path where the `latestly trained Model` is to be stored..")
+            return os.path.join(latest_dir, self.model_dir, MODEL_FILE)
+            ...
+        except Exception as e:
+            lg.exception(e)
+
