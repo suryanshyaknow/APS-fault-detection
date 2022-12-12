@@ -76,7 +76,8 @@ class DataTransformationConfig:
             self.data_transformation_dir = os.path.join(
                 training_pipeline_config.artifact_dir, "data_transformation")
 
-            self.transformer_path = os.path.join(self.data_transformation_dir, "transformer", TRANSFORMER_PIPELINE)
+            self.transformer_path = os.path.join(
+                self.data_transformation_dir, "transformer", TRANSFORMER_PIPELINE)
             self.transformed_training_file_path = os.path.join(
                 self.data_transformation_dir, TRAINING_FILE.replace(".csv", ".npz"))
             self.transformed_test_file_path = os.path.join(
@@ -93,7 +94,8 @@ class ModelTrainingConfig:
             self.model_training_dir = os.path.join(
                 training_pipeline_config.artifact_dir, "model_training")
 
-            self.model_path = os.path.join(self.model_training_dir, "model", MODEL_FILE)
+            self.model_path = os.path.join(
+                self.model_training_dir, "model", MODEL_FILE)
             self.expected_score = .85
             self.overfit_thresh = .1
             ...
@@ -103,4 +105,23 @@ class ModelTrainingConfig:
 
 @dataclass
 class ModelEvaluationConfig:
-    replace_model_thresh = 0.01
+    def __init__(self) -> None:
+        try:
+            replace_model_thresh = 0.01
+        except Exception as e:
+            lg.exception(e)
+
+
+@dataclass
+class ModelPushingConfig:
+    def __init__(self) -> None:
+        try:
+            training_pipeline_config = TrainingPipelineConfig()
+            self.model_pushing_dir = os.path.join(
+                training_pipeline_config.artifact_dir, "model_pushing", "saved_models")
+                
+            self.to_be_pushed_model_path = os.path.join(self.model_pushing_dir, MODEL_FILE)
+            self.to_be_pushed_transformer_path = os.path.join(self.model_pushing_dir, TRANSFORMER_PIPELINE)
+            ...
+        except Exception as e:
+            lg.exception(e)

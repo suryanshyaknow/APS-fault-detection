@@ -31,9 +31,9 @@ class ModelTrainingArtifact:
 class ModelEvaluationArtifact:
     is_model_replaced: bool
     improved_accuracy: float
-    ...
 
 
 @dataclass
-class ModelPusherArtifact:
-    ...
+class ModelPushingArtifact:
+    pushed_model_dir: str
+    saved_model_dir: str

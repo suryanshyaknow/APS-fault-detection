@@ -6,6 +6,7 @@ from src.components.data_validation import DataValidation
 from src.components.data_transformation import DataTransformation
 from src.components.model_training import ModelTraining
 from src.components.model_evaluation import ModelEvaluation
+from src.components.model_pushing import ModelPushing
 
 
 @dataclass
@@ -20,9 +21,9 @@ class TrainingPipeline:
             ingestion_artifact = ingestion.initiate()
 
             ######################### DATA VALIDATION ######################################
-            validation = DataValidation(
-                data_ingestion_artifact=ingestion_artifact)
-            validation_artifact = validation.initiate()
+            # validation = DataValidation(
+            #     data_ingestion_artifact=ingestion_artifact)
+            # validation_artifact = validation.initiate()
 
             ######################### DATA TRANSFORMATION ##################################
             transformation = DataTransformation(
@@ -41,6 +42,13 @@ class TrainingPipeline:
                 model_training_artifact=model_training_artifact
             )
             model_evaluation_artifact = model_evaluation.initiate()
+            
+            ######################### MODEL PUSHING ########################################
+            model_pushing = ModelPushing(
+                data_transformation_artifact=transformation_artifact,
+                model_training_artifact=model_training_artifact
+            )
+            model_pushing_artifact = model_pushing.initiate()
             ...
         except Exception as e:
             lg.exception(e)
