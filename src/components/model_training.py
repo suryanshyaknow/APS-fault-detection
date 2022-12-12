@@ -45,7 +45,7 @@ class ModelTraining:
                 f"Range of params to choose the best ones from: {grid_params}")
             grid_search = GridSearchCV(
                 param_grid=grid_params, estimator=base_model, cv=5, verbose=3, scoring='f1_micro')
-            lg.info("Grid Search Cross validation begins..")
+            lg.info("Grid Search cross-validation begins..")
             grid_search.fit(X, y)
             lg.info(
                 f"Cross-Validation concluded with the best params as {grid_search.best_params_}\nand the best estimator as {grid_search.best_estimator_}")
@@ -67,7 +67,7 @@ class ModelTraining:
         """
         try:
             xgb_clf = XGBClassifier()
-            lg.info(f"Our base model: {xgb_clf}")
+            lg.info(f"Our base Model: {xgb_clf}")
             # lg.info(
             #     'Since, `refit` defaults to True, we don\'t need to firstly fetch the best params and then train our base model using them.\nWe could straight away grab the best estimator that\'s been already trained on the entire training set.')
             lg.info(

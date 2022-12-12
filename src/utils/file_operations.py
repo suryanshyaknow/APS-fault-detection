@@ -151,7 +151,7 @@ class BasicUtils:
     @classmethod
     def load_object(cls, file_path: str, obj_desc: str) -> object:
         try:
-            lg.info(f'Loading the "{obj_desc}"..')
+            lg.info(f'loading the "{obj_desc}"..')
             if not os.path.exists(file_path):
                 lg.error('Uh Oh! Looks like the said file path or the object doesn\'t even exist!')
             else:

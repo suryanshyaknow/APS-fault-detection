@@ -37,39 +37,52 @@ class ModelEvaluation:
                 lg.info(f"Model Evaluation Artifact: {model_eval_artifact}")
 
             else:   
-                ################ Load Model and Transformer already present there in Model Registry ################
-                # Fetching their locations
+                ############## Load Older Model and respective Artifacts from Model Registry #################
+                # fetch Model path
                 lg.info(
-                    "fetching the locations of older model and transformer pipeline from the Model Registry..")
+                    "fetching the location of older Model from the Model Registry..")
                 model_path = self.model_registry_config.get_latest_model_path()
-                transformer_pipeline_path = self.model_registry_config.get_latest_transformer_path()
+                # fetch Transformer path
+                lg.info(
+                    "fetching the location of older corrosponding Transformer from the Model Registry..")
+                transformer_path = self.model_registry_config.get_latest_transformer_path()
+                # fetch Target Encoder path
+                lg.info(
+                    "fetching the location of older corrosponding Target Encoder from the Model Registry..")
+                target_encoder_path = self.model_registry_config.get_latest_target_encoder_path()
                 lg.info("locations fetched successfully!")
-                # Loading them
-                lg.info("Now, loading the older model and transformer pipeline..")
+                # Loading them all
+                lg.info("Now, loading the older model and corrosponding artifacts..")
                 older_model = BasicUtils.load_object(
                     model_path, obj_desc="older Model")
-                older_transformer_pipeline = BasicUtils.load_object(
-                    transformer_pipeline_path, obj_desc="older Transformer Pipeline")
+                older_transformer = BasicUtils.load_object(
+                    transformer_path, obj_desc="older Transformer")
+                older_target_encoder = BasicUtils.load_object(
+                    target_encoder_path, obj_desc="older Target Encoder")
+                lg.info("Older Model and respective Artifacts fetched successfully!")
 
-                ########################### Load latest Model and Transformer ######################################
-                lg.info("Now, loading the latest model and transformer pipeline..")
+                #################### Load latest Model and corrosponding Artifacts ###########################
+                lg.info("Now, loading the latest model and respective Arftifacts..")
                 latest_model = BasicUtils.load_object(
                     self.model_training_artifact.model_path, obj_desc="latest Model")
-                latest_transformer_pipeline = BasicUtils.load_object(
-                    self.data_transformation_artifact.transformer_path, obj_desc="latest Transformer Pipeline")
+                latest_transformer = BasicUtils.load_object(
+                    self.data_transformation_artifact.transformer_path, obj_desc="latest Transformer")
+                latest_target_encoder = BasicUtils.load_object(
+                    self.data_transformation_artifact.target_encoder_path, obj_desc="latest Target Encoder")
 
-                ############################ Load the test dataframe ###############################################
+                ########################## Load the test dataframe ###########################################
                 lg.info("loading the test dataset from the `data ingestion artifact`..")
+                # fetch the test dataframe
                 test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
+                # now fetch features and label separately
+                X_test, y_test = BasicUtils.get_features_and_labels(df=test_df, target=[self.target], desc="Test")
 
-
-                ########################### Evaluating the older Model's performance ###############################
-                # Pass the test dataset through the older Transformation Pipeline
+                ######################## Evaluating the older Model's performance ############################
+                # Transform the test features via the older Transformer
+                X_test_arr = older_transformer.transform(X_test)
+                # Encode the Categories to numerical dtype via the older Target Encoder
+                y_true =older_target_encoder.transform(y_test)
                 lg.info("Evaluating the performance of the `older model`..")
-                test_transformed_array = older_transformer_pipeline.transform(
-                    test_df)
-                # Configure the transformed test features for making predicitions
-                X_test_arr, y_true = test_transformed_array[:, :-1], test_transformed_array[:, -1]
                 lg.info(
                     "Making predictions on the test dataset using the `older model`..")
                 y_pred = older_model.predict(X_test_arr)
@@ -80,12 +93,11 @@ class ModelEvaluation:
                 lg.info(f"Older Model's performance: {older_model_score}")
 
                 ########################## Evaluating the latest Model's performance ###############################
-                lg.info("Evaluating the performance of the `older model`..")
-                # Pass the test dataset through the latest Transformation Pipeline
-                test_transformed_array = latest_transformer_pipeline.transform(
-                    test_df)
-                # Configure the transformed test features for making predictions
-                X_test_arr, y_true = test_transformed_array[:, :-1], test_transformed_array[:, -1]
+                # Transform the test features via the latest Transformer
+                X_test_arr = latest_transformer.transform(X_test)
+                # Encode the Categories to numerical dtype via the latest Target Encoder
+                y_true =latest_target_encoder.transform(y_test)
+                lg.info("Evaluating the performance of the `latest model`..")
                 lg.info(
                     "Making predictions on the test dataset using the `latest model`..")
                 y_pred = latest_model.predict(X_test_arr)

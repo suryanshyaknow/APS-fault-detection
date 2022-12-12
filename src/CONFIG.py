@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from src.logger import lg
 from typing import Optional
 from dataclasses import dataclass
-from src.entities.config import MODEL_FILE, TRANSFORMER_PIPELINE
+from src.entities.config import MODEL_FILE, TRANSFORMER, TARGET_ENCODER
 
 
 @dataclass
@@ -20,13 +20,14 @@ class Config:
 class ModelRegistryConfig:
     def __init__(
             self, model_registry: str = "saved_models", transformer_dir: str = "transformer",
-            model_dir: str = "model") -> None:
+            target_encoder_dir: str = "encoder", model_dir: str = "model") -> None:
 
         self.model_registry = model_registry
         # Making sure the Model Registry does exist
         os.makedirs(self.model_registry, exist_ok=True)
 
         self.transformer_dir = transformer_dir
+        self.target_encoder_dir = target_encoder_dir
         self.model_dir = model_dir
         ...
 
@@ -84,7 +85,25 @@ class ModelRegistryConfig:
                 lg.exception(
                     "Even the dir doesn't exist and you are expecting a transformer, shame!")
 
-            return os.path.join(latest_dir, self.transformer_dir, TRANSFORMER_PIPELINE)
+            return os.path.join(latest_dir, self.transformer_dir, TRANSFORMER)
+            ...
+        except Exception as e:
+            lg.exception(e)
+    
+    def get_latest_target_encoder_path(self) -> str:
+        """Returns the path of the latest `target encoder` dir of the Model Registry.
+
+        Returns:
+            str: Latest Target Encoder dir path of the Model Registry.
+        """
+        try:
+            latest_dir = self.get_latest_dir_path()
+            lg.info("Getting the `latest Target Encoder path` from the Model Registry..")
+            if latest_dir is None:
+                lg.exception(
+                    "Even the dir doesn't exist and you are expecting a target encoder, shame!")
+
+            return os.path.join(latest_dir, self.target_encoder_dir, TARGET_ENCODER)
             ...
         except Exception as e:
             lg.exception(e)
@@ -115,8 +134,22 @@ class ModelRegistryConfig:
         """
         try:
             latest_dir_to_save = self.get_latest_dir_path_to_save()
-            lg.info("Configuring the path where the `latestly built Transformer Pipeline` is to be stored..")
-            return os.path.join(latest_dir_to_save, self.transformer_dir, TRANSFORMER_PIPELINE)
+            lg.info("Configuring the path where the `latestly built Transformer` is to be stored..")
+            return os.path.join(latest_dir_to_save, self.transformer_dir, TRANSFORMER)
+            ...
+        except Exception as e:
+            lg.exception(e)
+
+    def save_latest_transformer_at(self) -> str:
+        """Dir path in the Model Registry to save the latest Target Encoder at.
+
+        Returns:
+            str: Dir path where the latest Target Encoder is to be stored.
+        """
+        try:
+            latest_dir_to_save = self.get_latest_dir_path()
+            lg.info("Configuring the path where the `latestly built Target Encoder` is to be stored..")
+            return os.path.join(latest_dir_to_save, self.target_encoder_dir, TARGET_ENCODER)
             ...
         except Exception as e:
             lg.exception(e)
