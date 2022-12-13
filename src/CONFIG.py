@@ -140,7 +140,7 @@ class ModelRegistryConfig:
         except Exception as e:
             lg.exception(e)
 
-    def save_latest_transformer_at(self) -> str:
+    def save_latest_target_encoder_at(self) -> str:
         """Dir path in the Model Registry to save the latest Target Encoder at.
 
         Returns:
