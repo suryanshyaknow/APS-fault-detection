@@ -45,7 +45,7 @@ jobs:
        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
  pull-and-run-image-from-ecr:
-  name: Continous Deployment
+  name: Continuous Deployment
   needs: build-and-push-image-to-ecr
   runs-on: self-hosted
   steps:
