@@ -8,7 +8,7 @@ from src.utils.file_operations import BasicUtils
 from datetime import datetime
 from dataclasses import dataclass
 
-PREDICTION_DIR = "prediction"
+PREDICTION_DIR = "predictions"
 
 
 @dataclass
@@ -60,7 +60,7 @@ class BatchPredictionPipeline:
                 file_path=self.model_registry_config.get_latest_transformer_path(), obj_desc="Transformer")
             lg.info("transforming the input data..")
             # first and foremost fetch the features that were used in training
-            input_features = list(transformer.feature_names_in)
+            input_features = list(transformer.feature_names_in_)
             # transform the input features from the input file and compose the consequent array
             input_arr = transformer.transform(input_df[input_features])
             lg.info(f"Input data transformed successfully!")
@@ -72,7 +72,7 @@ class BatchPredictionPipeline:
             model = BasicUtils.load_object(
                 file_path=self.model_registry_config.get_latest_model_path(), obj_desc="latestly trained Model")
             lg.info("Making predictions..")
-            preds = model.predict(input_arr)
+            preds = model.predict(input_arr).reshape(-1, 1)
             lg.info("Predictions made successfully!")
 
             #################### Load the Encoder and Inverse-transform the Predictions #########################
@@ -80,7 +80,7 @@ class BatchPredictionPipeline:
             lg.info(
                 "fetching the `OneHot Encoder` from the Model registry to inverse transform the predcitions..")
             target_enc = BasicUtils.load_object(
-                file_path=self.model_registry_config.get_latest_target_encoder_path, obj_desc="Target Encoder")
+                file_path=self.model_registry_config.get_latest_target_encoder_path(), obj_desc="Target Encoder")
             lg.info(
                 f"fitted OneHot Encoder: {target_enc} fetched successfully!")
             # Inverse transform the predictions
@@ -90,7 +90,7 @@ class BatchPredictionPipeline:
 
             ################## Configure the Predicitons and Save the Predictions file ##########################
             # Configure the Categorical Predictions into the dataframe
-            input_df["predictions"] = cat_preds
+            input_df["prediction"] = cat_preds
             # Save the Prediction file
             prediction_file_path = self.get_predicition_file_path()
             lg.info("Readying the prediction file..")

@@ -38,7 +38,6 @@ class ModelRegistryConfig:
             Optional[str]: Path of the latest dir of Model Registry.
         """
         try:
-            lg.info("Getting the `latest dir path` from the Model Registry..")
             dirs = os.listdir(self.model_registry)
             if len(dirs) == 0:
                 lg.warning(
