@@ -119,8 +119,8 @@ class DataTransformation:
                 f"Before Resampling, shape of the `training set`: {training_set.shape}")
             lg.info(
                 f"Before Resampling, shape of the `test set`: {test_set.shape}")
-            lg.info('Resampling via SMOTETomek using sampling_strategy="minority"..')
-            smt_tomek = SMOTETomek(sampling_strategy="minority")
+            lg.info('Resampling via SMOTETomek using sampling_strategy="auto"..')
+            smt_tomek = SMOTETomek(sampling_strategy="auto")
             X_train_res, y_train_res = smt_tomek.fit_resample(
                 X_train_transformed, y_train_encoded)
             X_test_res, y_test_res = smt_tomek.fit_resample(
