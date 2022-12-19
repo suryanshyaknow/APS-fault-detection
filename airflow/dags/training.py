@@ -5,13 +5,13 @@ from airflow.operators.python import PythonOperator
 
 
 with DAG(
-    'sensor_training',
+    'training_pipeline',
     default_args={'retries': 2},
     description='APS-fault-detection',
     schedule_interval="@weekly",
-    start_date=pendulum.datetime(2022, 14, 11, tz="UTC"),
+    start_date=pendulum.datetime(2022, 12, 11, tz="UTC"),
     catchup=False,
-    tags=['example']
+    tags=['training_pipeline']
 ) as dag:
 
     def training(**kwargs):

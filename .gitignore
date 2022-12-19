@@ -162,7 +162,8 @@ cython_debug/
 # Artifacts
 artifacts
 
-# Mundane
+# Not supposed to be tracked
 catboost_info
 in2__experimental.ipynb
 saved_models
+predictions
