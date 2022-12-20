@@ -9,6 +9,7 @@ imbalanced-learn
 numpy
 pandas
 pendulum
+pip-chill==1.0.1
 pymongo
 python-daemon
 python-dateutil
@@ -16,5 +17,7 @@ python-dotenv
 PyYAML
 scikit-learn
 scipy
+swagger-ui-bundle==0.0.9
+wincertstore==0.2
 xgboost
 -e .

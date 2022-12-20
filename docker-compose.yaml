@@ -1,6 +1,7 @@
 version: "2"
 services:
  application:
+    build: .
     image: .
     container_name: sensor
     ports:
