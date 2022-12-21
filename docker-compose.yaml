@@ -1,8 +1,7 @@
 version: "2"
 services:
  application:
-    build: .
-    image: .
+    image: ${IMAGE_NAME}
     container_name: sensor
     ports:
       - "8080:8080"
