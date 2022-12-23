@@ -11,12 +11,23 @@ from sklearn.model_selection import train_test_split
 
 @dataclass
 class DataIngestion:
+    """Shall be used for obtaining and importing data from the desired dB in a form of feature store file.
+    Data is also being split into train and test subsets herein this stage only.
+    """
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.DataIngestion" class')
 
     data_ingestion_config = DataIngestionConfig()
 
     def initiate(self) -> DataIngestionArtifact:
+        """Initiates the Data Ingestion stage of the training piepeline.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while ingestion of data.
+
+        Returns:
+            DataIngestionArtifact: Contains configurations of `feature-store file`, `training set` and `test set`. 
+        """
         try:
             lg.info(f"\n{'='*27} DATA INGESTION {'='*40}")
 
@@ -67,3 +78,4 @@ class DataIngestion:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e

@@ -9,6 +9,15 @@ from dataclasses import dataclass
 
 @dataclass
 class ModelPushing:
+    """Shall be used to trigger Model Pushing stage in which latestly built models and relevant artifacts are to be pushed into 
+    the Model Registry.
+
+    Args:
+        data_transformation_artifact (DataTransformationArtifact): Takes in a `DataTransforamtionArtifact` object for accessing the 
+        config of artifacts that were built during the Data Transformation stage.
+        model_training_artiafact (ModelTrainingArtifact): Takes in a `ModelTrainingArtifact` object for accessing the config of the
+        model that was built during the Model Training stage.
+    """
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.ModelPushing" class')
 
@@ -19,21 +28,30 @@ class ModelPushing:
     model_registry_config = ModelRegistryConfig()
 
     def initiate(self) -> ModelPushingArtifact:
+        """Initiates the Model Pushing stage in which latestly built transformation artifacts and models are gonna be pushed into
+        the model registry.
+
+        Raises:
+            e: Raises relevant exception if any sort of error pops up during the Model Pushing stage.
+
+        Returns:
+            ModelPushingArtifact: Configuraton object that contains configs of the latestly built transformation objects and models.
+        """
         try:
             lg.info(f"\n{'='*27} MODEL PUSHING {'='*40}")
 
             ############################# Load Objects which are to be saved ###################################
-            # Load latest transformer from the `DataTransformation` artifact
+            # Load the latest transformer from the `DataTransformation` artifact
             transformer = BasicUtils.load_object(
                 file_path=self.data_transformation_artifact.transformer_path, obj_desc="Transformer")
-            # Load latest target encoder from the `DataTransformation` artifact
+            # Load the latest target encoder from the `DataTransformation` artifact
             target_enc = BasicUtils.load_object(
                 file_path=self.data_transformation_artifact.target_encoder_path, obj_desc="Target Encoder")
-            # Load latest model from the `ModelTraining` artifact
+            # Load the latest model from the `ModelTraining` artifact
             model = BasicUtils.load_object(
                 file_path=self.model_training_artifact.model_path, obj_desc="trained Model")
 
-            ############################# Save them as `Model Pushing`` Artifacts ##############################
+            ############################# Save them as `Model Pushing` Artifacts ###############################
             lg.info(
                 "Saving the model and the corrosponding artifacts as the `Model Pushing` stage's artifacts..")
             # Save the Transformer
@@ -55,7 +73,7 @@ class ModelPushing:
 
             ############################# Save them to `Model Registry` dir ####################################
             lg.info(
-                "Now, saving the \"model\" and the \"transformer pipline\" in the `Model Registry`..")
+                'Now, saving the "model" and the "transformer pipline" in the `Model Registry`..')
             # Save the Transformer
             latest_transformer_dir = self.model_registry_config.save_latest_transformer_at()
             BasicUtils.save_object(
@@ -81,3 +99,4 @@ class ModelPushing:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e

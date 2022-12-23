@@ -8,6 +8,7 @@ import dill
 
 
 class BasicUtils:
+    """Shall be used for accessing basic utilities methods."""
 
     @classmethod
     def configure_float_columns(cls, df: pd.DataFrame, exclude_columns: List, desc: str) -> pd.DataFrame:
@@ -17,6 +18,9 @@ class BasicUtils:
             df (pd.DataFrame): Dataframe whose columns gotta be configured.
             exclude_columns (List): List of columns which are not to be typecasted into float dtype.
             desc (str): Description of the said dataframe.
+
+        Raises:
+            e: Throws relevant exception if any error pops while configuring the said columns.
 
         Returns:
             pd.DataFrame: Dataframe after its desired columns has been typecasted.
@@ -36,6 +40,7 @@ class BasicUtils:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     @classmethod
     def get_numerical_and_categorical_attributes(cls, df: pd.DataFrame, desc: str):
@@ -45,6 +50,9 @@ class BasicUtils:
         Args:
             df (pd.DataFrame): Dataframe whose attributes gotta be fetched.
             desc (str): Description of the said dataframe.
+
+        Raises:
+            e: Throws relevant exception if any error pops.
 
         Returns:
             tuple(List, List): First list contains numerical columns names and as such the second contains
@@ -61,6 +69,7 @@ class BasicUtils:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     @classmethod
     def get_features_and_labels(cls, df: pd.DataFrame, target: List, desc: str) -> Tuple:
@@ -71,6 +80,9 @@ class BasicUtils:
             df (pd.DataFrame): Dataframe whose features and labels are to be returned.
             target (List): List of target column names to be included in the labels dataframe.
             desc (str): Description of the said dataframe.
+
+        Raises:
+            e: Throws relevant exception if any error pops while separating features and labels out.
 
         Returns:
             Tuple (pd.DataFrame, pd.DataFrame): Tuple of features pandas dataframe and labels pandas 
@@ -87,10 +99,14 @@ class BasicUtils:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     @classmethod
     def save_numpy_array(cls, file_path: str, arr: np.array, desc: str):
         """Saves the numpy array at the desired `file_path` location.
+
+        Raises:
+            e: Throws relevant exception if any error pops up while saving the given numpy array.
 
         Args:
             file_path (str): Location where the numpy array is to be stored.
@@ -108,10 +124,14 @@ class BasicUtils:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     @classmethod
     def load_numpy_array(cls, file_path: str, desc: str):
         """Loads the desried numpy array from the desired `file_path` location.
+
+        Raises:
+            e: Throws relevant exception if any error pops up while loading or returning the desired numpy array.
 
         Args:
             file_path (str): Location from where the numpy array is to be fetched.
@@ -121,17 +141,24 @@ class BasicUtils:
             lg.info(f'Loading the "{desc} Array" from "{file_path}"..')
 
             if not os.path.exists(file_path):
-                lg.error('Uh Oh! Looks like the said file path or the numpy array doesn\'t even exist!')
+                lg.error(
+                    'Uh Oh! Looks like the said file path or the numpy array doesn\'t even exist!')
+                raise Exception(
+                    'Uh Oh! Looks like the said file path or the numpy array doesn\'t even exist!')
             else:
                 lg.info(f'"{desc} Array" loaded successsfully!')
                 return np.load(open(file_path, 'rb'))
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     @classmethod
     def save_object(cls, file_path: str, obj: object, obj_desc: str) -> None:
         """Saves the desired object at the said desired location.
+
+        Raises:
+            e: Throws relevant exception if any error pops up while saving the desired object.
 
         Args:
             file_path (str): Location where the object is to be stored.
@@ -147,23 +174,40 @@ class BasicUtils:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     @classmethod
     def load_object(cls, file_path: str, obj_desc: str) -> object:
+        """Loads the desired object from the provided location.
+
+        Raises:
+            e: Throws relevant exception if any error pops up while laoding or returning the desired object.
+
+        Args:
+            file_path (str): Object's location.
+            obj_desc (str): Object's description.
+        """
         try:
             lg.info(f'loading the "{obj_desc}"..')
             if not os.path.exists(file_path):
-                lg.error('Uh Oh! Looks like the said file path or the object doesn\'t even exist!')
+                lg.error(
+                    'Uh Oh! Looks like the said file path or the object doesn\'t even exist!')
+                raise Exception(
+                    'Uh Oh! Looks like the said file path or the object doesn\'t even exist!')
             else:
                 lg.info(f'"{obj_desc}" loaded successfully!')
-                return dill.load(open(file_path, 'rb')) 
+                return dill.load(open(file_path, 'rb'))
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     @classmethod
     def write_yaml_file(cls, file_path: str, data: dict, desc: str):
         """Dumps the desired data into `yaml` file at the said location.
+
+        Raises:
+            e: Throws relevant exception if any error pops up.
 
         Args:
             file_path (str): Location where yaml file is to be created.
@@ -179,3 +223,4 @@ class BasicUtils:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e

@@ -12,6 +12,13 @@ from src.utils.file_operations import BasicUtils
 
 @dataclass
 class DataValidation:
+    """Shall be used to validate the raw data after the ingestion has been done from the selected relational database
+    and to generate a validation report accordingly.
+    
+    Args:
+        data_ingestion_artifact (DataIngestionArtifact): Takes in a `DataIngestionArtifact` object as pre-requisite to 
+        trigger the Data Validation stage.
+    """
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.DataValidation" class')
 
@@ -20,11 +27,14 @@ class DataValidation:
     validation_report = dict()
 
     def drop_redundant_columns(self, df: pd.DataFrame, missing_thresh: float, report_key: str) -> Optional[pd.DataFrame]:
-        """Drops the columns having missing values more than said threshold.
+        """Drops the columns having missing values more than the said threshold.
 
         Args:
             df (pd.DataFrame): Accepts the dataframe whose columns have to be dropped.
             missing_thresh (float): Percentage criterion to drop a column.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while dropping the redundant columns.
 
         Returns:
             Optional[pd.DataFrame]: Dataframe after getting its redundant columns droppeds.
@@ -53,6 +63,7 @@ class DataValidation:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def required_columns_check(self, base_df: pd.DataFrame, current_df: pd.DataFrame, report_key: str) -> bool:
         """Performs check for columns taking reference as the MDM (Master Data Management).
@@ -61,6 +72,10 @@ class DataValidation:
             base_df (pd.DataFrame): Reference dataframe.
             current_df (pd.DataFrame): Present dataframe on which check has to be performed having `base_df` as reference.
             report_key (str): Key name for holding dropped columns in the validation report.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up preforming `Required Columns check`.
+
         Returns:
             bool: True if all the required columns are present inside our current dataframe, else False.
         """
@@ -84,6 +99,7 @@ class DataValidation:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def data_drift_check(self, base_df: pd.DataFrame, current_df: pd.DataFrame, current_df_desc: str, report_key: str) -> None:
         """Performs "data drift" check by validating if the distributions of both base dataframe and present 
@@ -95,6 +111,9 @@ class DataValidation:
             current_df_desc (pd.DataFrame): Dataframe on which data drift check has to be done.
             current_desc (str): Description of the said `Current Dataframe`.
             report_key (str): Key name for holding missing columns in the validation report.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while performing `Data Drift check`.
         """
         try:
             ##################### Configuring Columns' datatypes ##############################################
@@ -152,8 +171,17 @@ class DataValidation:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def initiate(self) -> DataValidationArtifact:
+        """Initiates the Data Validation stage of the training pipeline and generates a validation report accordingly.
+
+        Raises:
+            e: Raises relevant exception should any kind of error pops up during validating the data.
+
+        Returns:
+            DataValidationArtifact: Contains configuration of consequently generated `Validation Report`.
+        """
         try:
             lg.info(f"\n{'='*27} DATA VALIDATION {'='*40}")
 
@@ -218,3 +246,4 @@ class DataValidation:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e

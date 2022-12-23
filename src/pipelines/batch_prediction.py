@@ -13,7 +13,12 @@ PREDICTION_DIR = "predictions"
 
 @dataclass
 class BatchPredictionPipeline:
-    lg.info("Prediciton Pipeline commences now..")
+    """Shall be used for triggering the prediction pipeline.
+
+    Args:
+        input file path (str): Location of batch input file for which predictions gotta be made.
+    """
+    lg.info("Prediction Pipeline commences now..")
     lg.info(
         f"Entered the {os.path.basename(__file__)[:-3]}.BatchPredictionPipeline")
 
@@ -21,11 +26,11 @@ class BatchPredictionPipeline:
     model_registry_config = ModelRegistryConfig()
 
     def get_predicition_file_path(self) -> str:
-        """Returns the file path where the Predictions file is to be stored. And generates a new one each time this function is called
-        in regard to teh datetime stamp.
+        """Returns the file path where the Predictions file is to be stored. And generates a new one in regard to the datetime stamp,
+         each time this function is called.
 
         Returns:
-            str: Prediciton file path.
+            str: Path where prepared prediction file's gotta be stored.
         """
         try:
             # Create Prediction dir if not already there
@@ -38,11 +43,17 @@ class BatchPredictionPipeline:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
         else:
             return prediction_file_path
-            ...
 
     def initiate(self) -> str:
+        """Triggers the prediction pipeline flow, making predictions for the input batch file and returns the prepared 
+        prediction file.
+
+        Returns:
+            str: Location of the prepared prediction file.
+        """
         try:
             ############## Read the dataset from the given path on which prediction is to be done ##############
             lg.info(
@@ -102,7 +113,6 @@ class BatchPredictionPipeline:
         else:
             lg.info(f"Prediction file's ready at \"{prediction_file_path}\"")
             return prediction_file_path
-            ...
 
 
 if __name__ == "__main__":

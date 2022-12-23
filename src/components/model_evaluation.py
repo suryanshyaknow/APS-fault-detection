@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import numpy as np
 from src.CONFIG import ModelRegistryConfig
 from src.entities import config, artifact
 from src.utils.file_operations import BasicUtils
@@ -11,6 +10,17 @@ from dataclasses import dataclass
 
 @dataclass
 class ModelEvaluation:
+    """Shall be used to trigger Model Evaluation stage in which it's determined that whether the older model is to be replaced
+    in the production grade pipeline (if the newer model is performing better than the current deployed one).
+
+    Args:
+        data_ingestion_artifact (artifact.DataIngestionArtifact): Takes in a `DataIngestionArtifact` object as a prerequisite for Model 
+        Evaluation stage.
+        data_transformation_artifact (artifact.DataTransformationArtifact): Takes in a `DataTransformationArtifact` object as a 
+        prerequisite for Model Evaluation stage.
+        model_training_artifact (artifact.ModelTrainingArtifact): Takes in a `ModelTrainingArtifact` object as a prerequisite for Model 
+        Evaluation stage.
+    """
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.ModelEvaluation" class')
 
@@ -22,7 +32,17 @@ class ModelEvaluation:
     model_registry_config = ModelRegistryConfig()
     target = config.BaseConfig().target
 
-    def initiate(self):
+    def initiate(self) -> artifact.ModelEvaluationArtifact:
+        """Initiates the Model Evaluation stage of the training pipline in which it's determined that whether the currently delpoyed
+        model is to be replaced in the production grade pipline by the latest model and in turn returns the artifact config containing 
+        the decision `is_model_replaced`, along with its `improved_accuracy`, if yes.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up during the execution of Model Evaluation component.
+        Returns:
+            artifact.ModelEvaluationArtifact: Configuration object containing the decision `is_model_replaced` along with its 
+            `improved_accuracy`.
+        """
         try:
             lg.info(f"\n{'='*27} MODEL EVALUATION {'='*40}")
             latest_dir = self.model_registry_config.get_latest_dir_path()
@@ -31,7 +51,7 @@ class ModelEvaluation:
             # If there's no old model, then the configure the current one
             if latest_dir is None:
                 lg.info(
-                    "Configuring the current model as there's no old model present to get compared to it..")
+                    "There's no old model present to get compared to the latest one!")
                 model_eval_artifact = artifact.ModelEvaluationArtifact(
                     is_model_replaced=True, improved_accuracy=None)
                 lg.info(f"Model Evaluation Artifact: {model_eval_artifact}")
@@ -61,7 +81,7 @@ class ModelEvaluation:
                     target_encoder_path, obj_desc="older Target Encoder")
                 lg.info("Older Model and respective Artifacts fetched successfully!")
 
-                #################### Load latest Model and corrosponding Artifacts ###########################
+                ################### Load the latest Model and corrosponding Artifacts ########################
                 lg.info("Now, loading the latest model and respective Arftifacts..")
                 latest_model = BasicUtils.load_object(
                     self.model_training_artifact.model_path, obj_desc="latest Model")
@@ -132,3 +152,4 @@ older one and quite evidently, the older one shall be replaced!")
             ...
         except Exception as e:
             lg.exception(e)
+            raise e

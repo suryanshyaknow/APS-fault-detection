@@ -18,6 +18,18 @@ class Config:
 
 
 class ModelRegistryConfig:
+    """Shall be used to access any dir of Model Registry.
+
+    Note: Model Registry is a centralized dir for older models and relevant artifacts (built in past) and will contain newer if it's 
+    determined that they perform better than the older ones, with their dirs sorted by integers in an increasing manner.
+
+    Args:
+        model_registry (str, optional): Name of the Model Registry dir. Defaults to "saved_models".
+        transformer_dir (str, optional): Transformer's dir name inside the model registry. Defaults to "transformer".
+        target_encoder_dir (str, optional): Target Encoder's dir name inside the model registry. Defaults to "encoder".
+        model_dir (str, optional): Model dir's name inside the model registry. Defaults to "model".
+    """
+
     def __init__(
             self, model_registry: str = "saved_models", transformer_dir: str = "transformer",
             target_encoder_dir: str = "encoder", model_dir: str = "model") -> None:
@@ -33,6 +45,9 @@ class ModelRegistryConfig:
 
     def get_latest_dir_path(self) -> Optional[str]:
         """Returns path of the latest dir of Model Registry.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning latest dir path.
 
         Returns:
             Optional[str]: Path of the latest dir of Model Registry.
@@ -52,9 +67,13 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def get_latest_model_path(self) -> str:
         """Returns the path of the latest `model` dir of the Model Registry.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning the latest model path.
 
         Returns:
             str: Latest Model dir path of the Model Registry.
@@ -70,9 +89,13 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def get_latest_transformer_path(self) -> str:
         """Returns the path of the latest `transformer` dir of the Model Registry.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning the latest transformer path.
 
         Returns:
             str: Latest Transformer dir path of the Model Registry.
@@ -88,9 +111,13 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
     
     def get_latest_target_encoder_path(self) -> str:
         """Returns the path of the latest `target encoder` dir of the Model Registry.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning the latest target encoder path.
 
         Returns:
             str: Latest Target Encoder dir path of the Model Registry.
@@ -106,9 +133,14 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def get_latest_dir_path_to_save(self) -> str:
         """Returns the latest dir where the latest models and relevant artifacts can be stored.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning the latest dir (for saving 
+            newer artifacts) path.
 
         Returns:
             str: Latest dir path to save the latest models and relevant artifacts.
@@ -124,9 +156,14 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def save_latest_transformer_at(self) -> str:
         """Dir path in the Model Registry to save the latest Transformer at.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning the latest transformer dir (for saving 
+            newer transformer) path.
 
         Returns:
             str: Dir path where the latest Transformer is to be stored.
@@ -138,9 +175,14 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def save_latest_target_encoder_at(self) -> str:
         """Dir path in the Model Registry to save the latest Target Encoder at.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning the latest target encoder dir (for 
+            saving newer target encoder) path.
 
         Returns:
             str: Dir path where the latest Target Encoder is to be stored.
@@ -152,9 +194,14 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def save_latest_model_at(self) -> str:
         """Dir path in the Model Registry to save the latest Model at.
+        
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while returning the latest model dir (for saving 
+            newer model) path.
 
         Returns:
             str: Dir path where the latest Model is to be stored.
@@ -166,4 +213,5 @@ class ModelRegistryConfig:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 

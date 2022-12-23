@@ -13,6 +13,13 @@ from dataclasses import dataclass
 
 @dataclass
 class ModelTraining:
+    """Shall be used for training the shortlisted model, finetuning it and apparently returning configurations of the built
+    (and finetuned) model and its peformance measures.
+
+    Args:
+        data_transformation_artifact (DataTransforamtion): Takes in a `DataTransformationArtifact` object to have access to 
+        all relevant configs of Data Transforamtion stage.
+    """
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.ModelTraining" class')
 
@@ -28,8 +35,11 @@ class ModelTraining:
             y (np.array): Respective target labels.
             base_model (XGBClassifier, optional): Base XGBClassifier. Defaults to XGBClassifier().
 
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while finetuning the said model.
+
         Returns:
-            Dict: best params found for the base XGBClassifier to be trained on.
+            Dict: Best params found (via GridSearchCV) for the base XGBClassifier to be trained on.
         """
         try:
             grid_params = {
@@ -54,6 +64,7 @@ class ModelTraining:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def train_model(self, X: np.array, y: np.array) -> XGBClassifier:
         """Trains the XGBClassifier on the provided features and target.
@@ -61,6 +72,9 @@ class ModelTraining:
         Args:
             X (np.array): Features on which the XGBClassifer has to be trained.
             y (np.array): Target for the given features.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while training the said model.
 
         Returns:
             XGBClassifier: Fitted XGBClassifier on the given features and label.
@@ -94,8 +108,18 @@ class ModelTraining:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
     def initiate(self) -> ModelTrainingArtifact:
+        """Triggers the Model Building stage of the training pipeline and returns the configurations of the model built and its 
+        performance measures, as in contained by the `ModelTrainingArtifact`.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops in the Model Building stage.
+
+        Returns:
+            ModelTrainingArtifact: Contains the built model's config and its performance measures.
+        """
         try:
             lg.info(f"\n{'='*27} MODEL TRAINING {'='*40}")
 
@@ -174,3 +198,4 @@ class ModelTraining:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e

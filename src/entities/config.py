@@ -33,6 +33,7 @@ class TrainingPipelineConfig:
             os.getcwd(), "artifacts", f"{datetime.now().strftime('%m%d%Y__%H%M%S')}")
     except Exception as e:
         lg.exception(e)
+        raise e
 
 
 class DataIngestionConfig:
@@ -52,6 +53,7 @@ class DataIngestionConfig:
             self.random_state = 42
         except Exception as e:
             lg.exception(e)
+            raise e
 
 
 class DataValidationConfig:
@@ -65,9 +67,9 @@ class DataValidationConfig:
             self.missing_thresh = .3
             self.report_file_path = os.path.join(
                 self.data_validation_dir, "report.yaml")
-            ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
 
 class DataTransformationConfig:
@@ -89,9 +91,9 @@ class DataTransformationConfig:
             # Transformed Test set path
             self.transformed_test_file_path = os.path.join(
                 self.data_transformation_dir, TEST_FILE.replace(".csv", ".npz"))
-            ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
 
 class ModelTrainingConfig:
@@ -105,9 +107,9 @@ class ModelTrainingConfig:
                 self.model_training_dir, "model", MODEL_FILE)
             self.expected_score = .85
             self.overfit_thresh = .1
-            ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
 
 @dataclass
@@ -117,6 +119,7 @@ class ModelEvaluationConfig:
             replace_model_thresh = 0.01
         except Exception as e:
             lg.exception(e)
+            raise e
 
 
 @dataclass
@@ -133,6 +136,6 @@ class ModelPushingConfig:
                 self.model_pushing_dir, TRANSFORMER)
             self.to_be_pushed_target_encoder_path = os.path.join(
                 self.model_pushing_dir, TARGET_ENCODER)
-            ...
         except Exception as e:
             lg.exception(e)
+            raise e

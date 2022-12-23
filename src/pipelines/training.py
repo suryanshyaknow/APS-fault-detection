@@ -11,10 +11,17 @@ from src.components.model_pushing import ModelPushing
 
 @dataclass
 class TrainingPipeline:
+    """Shall be used for triggering the Training pipeline."""
     lg.info("Training Pipeline begins now..")
     lg.info(f"Entered the {os.path.basename(__file__)[:-3]}.TrainingPipeline")
 
-    def begin(self):
+    def begin(self) -> None:
+        """Commences the training pipeline starting from Data Ingestion component followed by Data Validation, Data Transformation,
+        Model Training, Model Evaluation and at last, Model Pushing.
+
+        Raises:
+            e: Raises exception should any sort of error pops up during the training pipeline flow execution.
+        """
         try:
             ######################### DATA INGESTION #######################################
             ingestion = DataIngestion()
@@ -52,6 +59,7 @@ class TrainingPipeline:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
         else:
             lg.info("Training Pipeline ran with success!")
 

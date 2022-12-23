@@ -14,6 +14,13 @@ from imblearn.combine import SMOTETomek
 
 @dataclass
 class DataTransformation:
+    """Shall be used for preprocessing and transformation of data before making any statistical analyses and feeding 
+    the data into ML algorithms.
+
+    Args:
+        data_ingestion_artifact (DataIngestionArtifact): Takes in a `DataIngestionArtifact` object as pre-requisite to 
+        trigger the Data Transformation stage.
+    """
     lg.info(
         f'Entered the "{os.path.basename(__file__)[:-3]}.DataTransformation" class')
 
@@ -25,6 +32,9 @@ class DataTransformation:
     def get_transformer(cls) -> Pipeline:
         """Returns a `Custom Pipeline` for numerical attributes of the said dataset. Pipeline contains 
         `SimpleImputer` and `RobustScaler` to transform the features of the very same dataset.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while fetching the said `transformer pipeline`.
 
         Returns:
             Pipeline: Custom Pipeline for the numerical features of the said dataset. 
@@ -40,11 +50,15 @@ class DataTransformation:
             return transformer
             ...
         except Exception as e:
-            lg.info(e)
+            lg.exception(e)
+            raise e
 
     @classmethod
     def get_target_encoder(cls) -> OneHotEncoder:
         """Returns the OneHotEncoder to transform the categories of the target column into the numerical dtype.
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up while fetching the said `target encoder`.
 
         Returns:
             OneHotEncoder: OneHotEncoder to encode and decode the categories of the target column when desired.
@@ -56,8 +70,19 @@ class DataTransformation:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
 
-    def initiate(self):
+    def initiate(self) -> DataTransformationArtifact:
+        """Initiates the Data Transformation stage of the training pipeline and returns the configurations of relevant artifacts
+        (being used in the process) and transformed datasets (being generated in the process).
+
+        Raises:
+            e: Raises relevant exception should any sort of error pops up in the Data Transformation stage.
+
+        Returns:
+            DataTransformationArtifact: Contains configurations of `transformer pipeline`, `target encoder` and transformed 
+            training and test arrays. 
+        """
         try:
             lg.info(f"\n{'='*27} DATA TRANSFORMATION {'='*40}")
 
@@ -112,29 +137,25 @@ class DataTransformation:
                 obj=target_enc,
                 obj_desc="target encoder")
 
-            ############################# Resampling of Data Instances #########################################
+            ############################# Resampling of Training Instances #####################################
             lg.info(
-                "Resampling the data instances as our target attribute is highly imbalanced..")
+                "Resampling the training instances as our target attribute is highly imbalanced..")
             lg.info(
                 f"Before Resampling, shape of the `training set`: {training_set.shape}")
-            lg.info(
-                f"Before Resampling, shape of the `test set`: {test_set.shape}")
             lg.info('Resampling via SMOTETomek using sampling_strategy="auto"..')
             smt_tomek = SMOTETomek(sampling_strategy="auto")
             X_train_res, y_train_res = smt_tomek.fit_resample(
                 X_train_transformed, y_train_encoded)
-            X_test_res, y_test_res = smt_tomek.fit_resample(
-                X_test_transformed, y_test_encoded)
 
-            lg.info("resampling of both training and test sets done successfully!")
+            lg.info("..resampling of training instances is done successfully!")
 
             ######################### Configure Training and Test arrays #######################################
             training_arr_res = np.c_[X_train_res, y_train_res]
             lg.info(
                 f"After Resampling, shape of the `training set`: {training_arr_res.shape}")
-            test_arr_res = np.c_[X_test_res, y_test_res]
+            test_arr_res = np.c_[X_test_transformed, y_test_encoded]
             lg.info(
-                f"After Resampling, shape of the `test set`: {test_arr_res.shape}")
+                f"Configured the training and test arrays successfully!")
 
             ################### Save Training and Test arrays ##################################################
             # Saving the Training Array
@@ -164,3 +185,4 @@ class DataTransformation:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
