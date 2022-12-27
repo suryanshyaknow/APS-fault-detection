@@ -92,13 +92,13 @@ class ModelRegistryConfig:
             raise e
 
     def get_latest_transformer_path(self) -> str:
-        """Returns the path of the latest `transformer` dir of the Model Registry.
+        """Returns the path of the `latest transformer` from the Model Registry.
 
         Raises:
             e: Raises relevant exception should any sort of error pops up while returning the latest transformer path.
 
         Returns:
-            str: Latest Transformer dir path of the Model Registry.
+            str: Latest Transformer path of the Model Registry.
         """
         try:
             latest_dir = self.get_latest_dir_path()
@@ -114,7 +114,7 @@ class ModelRegistryConfig:
             raise e
     
     def get_latest_target_encoder_path(self) -> str:
-        """Returns the path of the latest `target encoder` dir of the Model Registry.
+        """Returns the path of the `latest target encoder` of the Model Registry.
 
         Raises:
             e: Raises relevant exception should any sort of error pops up while returning the latest target encoder path.
@@ -136,7 +136,7 @@ class ModelRegistryConfig:
             raise e
 
     def get_latest_dir_path_to_save(self) -> str:
-        """Returns the latest dir where the latest models and relevant artifacts can be stored.
+        """Returns the latest dir where the latest models and relevant artifacts shall be stored.
 
         Raises:
             e: Raises relevant exception should any sort of error pops up while returning the latest dir (for saving 
@@ -159,14 +159,14 @@ class ModelRegistryConfig:
             raise e
 
     def save_latest_transformer_at(self) -> str:
-        """Dir path in the Model Registry to save the latest Transformer at.
+        """Path in the Model Registry to save the latest Transformer at.
 
         Raises:
-            e: Raises relevant exception should any sort of error pops up while returning the latest transformer dir (for saving 
-            newer transformer) path.
+            e: Raises relevant exception should any sort of error pops up while returning the latest transformer path (for saving 
+            newer transformer).
 
         Returns:
-            str: Dir path where the latest Transformer is to be stored.
+            str: Path where the latest Transformer is to be stored at.
         """
         try:
             latest_dir_to_save = self.get_latest_dir_path_to_save()
@@ -178,14 +178,14 @@ class ModelRegistryConfig:
             raise e
 
     def save_latest_target_encoder_at(self) -> str:
-        """Dir path in the Model Registry to save the latest Target Encoder at.
+        """Path in the Model Registry to save the latest Target Encoder at.
 
         Raises:
-            e: Raises relevant exception should any sort of error pops up while returning the latest target encoder dir (for 
-            saving newer target encoder) path.
+            e: Raises relevant exception should any sort of error pops up while returning the latest target encoder path (for 
+            saving newer target encoder).
 
         Returns:
-            str: Dir path where the latest Target Encoder is to be stored.
+            str: Path where the latest Target Encoder is to be stored at.
         """
         try:
             latest_dir_to_save = self.get_latest_dir_path()
