@@ -9,13 +9,13 @@ from dataclasses import dataclass
 
 @dataclass
 class ModelPushing:
-    """Shall be used to trigger Model Pushing stage in which latestly built models and relevant artifacts are to be pushed into 
-    the Model Registry.
+    """Shall be used to trigger Model Pushing stage in which latestly built models and corrsoponding artifacts are to be pushed into 
+    the Model Registry and to be saved as Model Pushing's artifact as well.
 
     Args:
         data_transformation_artifact (DataTransformationArtifact): Takes in a `DataTransforamtionArtifact` object for accessing the 
         config of artifacts that were built during the Data Transformation stage.
-        model_training_artiafact (ModelTrainingArtifact): Takes in a `ModelTrainingArtifact` object for accessing the config of the
+        model_training_artifact (ModelTrainingArtifact): Takes in a `ModelTrainingArtifact` object for accessing the config of the
         model that was built during the Model Training stage.
     """
     lg.info(
@@ -35,19 +35,19 @@ class ModelPushing:
             e: Raises relevant exception if any sort of error pops up during the Model Pushing stage.
 
         Returns:
-            ModelPushingArtifact: Configuraton object that contains configs of the latestly built transformation objects and models.
+            ModelPushingArtifact: Configuration object that contains configs of the latestly built transformation objects and models.
         """
         try:
             lg.info(f"\n{'='*27} MODEL PUSHING {'='*40}")
 
             ############################# Load Objects which are to be saved ###################################
-            # Load the latest transformer from the `DataTransformation` artifact
+            # Load the latest transformer from the DataTransformation's artifacts
             transformer = BasicUtils.load_object(
                 file_path=self.data_transformation_artifact.transformer_path, obj_desc="Transformer")
-            # Load the latest target encoder from the `DataTransformation` artifact
+            # Load the latest target encoder from the DataTransformation's artifacts
             target_enc = BasicUtils.load_object(
                 file_path=self.data_transformation_artifact.target_encoder_path, obj_desc="Target Encoder")
-            # Load the latest model from the `ModelTraining` artifact
+            # Load the latest model from the ModelTraining's artifacts
             model = BasicUtils.load_object(
                 file_path=self.model_training_artifact.model_path, obj_desc="trained Model")
 

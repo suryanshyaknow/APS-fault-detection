@@ -128,7 +128,7 @@ class ModelEvaluation:
                 lg.info(f"Latest Model's performance: {latest_model_score}")
 
                 ################## Comparison between the two versions to keep the better one ######################
-                if latest_model_score <= older_model_score:
+                if (latest_model_score - older_model_score) <= self.model_eval_config.replace_model_thresh:
                     lg.exception(
                         f"The `latestly trained model` (with {latest_model_score} score)) ain't better than the older \
 one (with {older_model_score} score) and quite evidently, the older model shall not be replaced!")
@@ -136,7 +136,7 @@ one (with {older_model_score} score) and quite evidently, the older model shall 
                         f"The `latestly trained model` (with {latest_model_score} score)) ain't better than the older \
 one (with {older_model_score} score) and quite evidently, the older model shall not be replaced!")
 
-                lg.info("The `latestly trained model` (with {latest_model_score} score)) performed better than the \
+                lg.info(f"The `latestly trained model` (with {latest_model_score} score)) performed better than the \
 older one and quite evidently, the older one shall be replaced!")
 
                 ############################## Save Artifacts Config ##############################################

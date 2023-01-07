@@ -26,8 +26,11 @@ class BatchPredictionPipeline:
     model_registry_config = ModelRegistryConfig()
 
     def get_predicition_file_path(self) -> str:
-        """Returns the file path where the Predictions file is to be stored. And generates a new one in regard to the datetime stamp,
-         each time this function is called.
+        """Returns the file path where the Predictions file is to be stored. And generates a new one in regard 
+        to the datetime stamp, each time this function is called.
+        
+        Raises:
+            e: Throws exception should any error or exception pops up while execution of this method.
 
         Returns:
             str: Path where prepared prediction file's gotta be stored.
@@ -48,8 +51,11 @@ class BatchPredictionPipeline:
             return prediction_file_path
 
     def initiate(self) -> str:
-        """Triggers the prediction pipeline flow, making predictions for the input batch file and returns the prepared 
-        prediction file.
+        """Triggers the prediction pipeline flow, making predictions for the input batch file and returns the 
+        prepared prediction file.
+
+        Raises:
+            e: Throws exception should any error or exception pops up while execution of the prediction pipeline.
 
         Returns:
             str: Location of the prepared prediction file.
@@ -110,8 +116,9 @@ class BatchPredictionPipeline:
             ...
         except Exception as e:
             lg.exception(e)
+            raise e
         else:
-            lg.info(f"Prediction file's ready at \"{prediction_file_path}\"")
+            lg.info(f'Prediction file\'s ready at "{prediction_file_path}"')
             return prediction_file_path
 
 
