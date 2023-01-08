@@ -1,23 +1,15 @@
-apache-airflow==2.5.0
-apache-airflow-providers-common-sql==1.3.1
-apache-airflow-providers-ftp==3.2.0
-apache-airflow-providers-http==4.1.0
-apache-airflow-providers-imap==3.1.0
-apache-airflow-providers-sqlite==3.3.1
+apache-airflow
 dill
 imbalanced-learn
 numpy
 pandas
 pendulum
-pip-chill==1.0.1
+pip-chill
 pymongo
-python-daemon
 python-dateutil
 python-dotenv
 PyYAML
 scikit-learn
 scipy
-swagger-ui-bundle==0.0.9
-wincertstore==0.2
 xgboost
 -e .
