@@ -70,7 +70,7 @@ class BatchPredictionPipeline:
             # Replace all `na` values with np.NaN
             input_df.replace({"na": np.NaN}, inplace=True)
 
-            #################### Load the Transformer and Transform the input data #############################
+            ######################## Load the Transformer and Transform the input data #########################
             # Load the Transformer from the Model Registry
             lg.info("loading the \"Transformer\" from the Model Registry..")
             transformer = BasicUtils.load_object(
@@ -82,7 +82,7 @@ class BatchPredictionPipeline:
             input_arr = transformer.transform(input_df[input_features])
             lg.info(f"Input data transformed successfully!")
 
-            ####################### Load the Model and Make Predictions ########################################
+            ############################## Load the Model and Make Predictions #################################
             # Load the Model
             lg.info(
                 "loading the latestly \"trained model\" from the Model Registry, for making predictions..")
@@ -92,7 +92,7 @@ class BatchPredictionPipeline:
             preds = model.predict(input_arr).reshape(-1, 1)
             lg.info("Predictions made successfully!")
 
-            #################### Load the Encoder and Inverse-transform the Predictions #########################
+            ##################### Load the Encoder and Inverse-transform the Predictions #######################
             # Grab the `OneHot Encoder` to inverse-transform predictions
             lg.info(
                 "fetching the `OneHot Encoder` from the Model registry to inverse transform the predcitions..")
@@ -105,7 +105,7 @@ class BatchPredictionPipeline:
             cat_preds = target_enc.inverse_transform(preds)
             lg.info("predictions transformed successfully!")
 
-            ################## Configure the Predicitons and Save the Predictions file ##########################
+            ##################### Configure the Predicitons and Save the Predictions file ######################
             # Configure the Categorical Predictions into the dataframe
             input_df["prediction"] = cat_preds
             # Save the Prediction file

@@ -123,7 +123,7 @@ class ModelTraining:
         try:
             lg.info(f"\n{'='*27} MODEL TRAINING {'='*40}")
 
-            ######################## Fetch the Training and Test arrays #######################################
+            ############################# Fetch the Training and Test arrays ##################################
             lg.info("fetching the transformed training and test arrays..")
             training_arr = BasicUtils.load_numpy_array(
                 file_path=self.data_transformation_artifact.transformed_training_file_path,
@@ -133,7 +133,7 @@ class ModelTraining:
                 desc="Test")
             lg.info("transformed training and test arrays fetched successfully..")
 
-            ######################## Separate Features and Label out ##########################################
+            ############################## Separate Features and Label out ####################################
             lg.info(
                 "separating the independent features and dependent target out from training and test arrays..")
             X_train, y_train = training_arr[:, :-1], training_arr[:, -1]
@@ -141,10 +141,10 @@ class ModelTraining:
             X_test, y_test = test_arr[:, :-1], test_arr[:, -1]
             lg.info("test features and target label fetched!")
 
-            ################################ Train the Model ##################################################
+            ######################################## Train the Model ##########################################
             mod = self.train_model(X_train, y_train)
 
-            ############################## Compute Performance Metric #########################################
+            ################################# Compute Performance Metric ######################################
             lg.info(
                 "Computing Performance Metric..\nChose `F1 score` as the performance metric for this project")
             # Performance on Training set
@@ -157,7 +157,7 @@ class ModelTraining:
             f1_test_score = round(f1_score(y_true=y_test, y_pred=yhat_test), 4)
             lg.info(f'Test `F1 score`: {f1_test_score}')
 
-            ######################### Check if Model's performance is good enough #############################
+            ########################## Check if Model's performance is good enough ############################
             lg.info("checking whether the model's performance is good enough..")
             lg.info(
                 f'Expected Score: {self.model_training_config.expected_score}')
@@ -167,7 +167,7 @@ class ModelTraining:
                 lg.warning(
                     "Model's performance ain't that good. Gotta retrain with better params!!")
 
-            ############################## Overfitting Check ##################################################
+            ####################################### Overfitting Check #########################################
             lg.info("Performing check for Overfitting..")
             diff = abs(f1_test_score - f1_training_score)
             lg.info(
@@ -179,13 +179,13 @@ class ModelTraining:
             else:
                 lg.info("Model ain't Overfitting. We're good to go!")
 
-            ############################## Save the Trained Model #############################################
+            #################################### Save the Trained Model #######################################
             lg.info("Saving the trained model i.e. XGBClassifier..")
             BasicUtils.save_object(
                 file_path=self.model_training_config.model_path, obj=mod,
                 obj_desc="Trained Model (XGBClassifier)")
 
-            ############################## Save Artifacts Config ##############################################
+            #################################### Save Artifacts Config ########################################
             model_training_artifact = ModelTrainingArtifact(
                 model_path=self.model_training_config.model_path,
                 f1_training_score=f1_training_score,

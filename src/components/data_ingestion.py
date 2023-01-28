@@ -31,7 +31,7 @@ class DataIngestion:
         try:
             lg.info(f"\n{'='*27} DATA INGESTION {'='*40}")
 
-            ######################## Readying the "sensors" dataframe ##########################################
+            ################################# Readying the "sensors" dataframe #################################
             lg.info('Exporting the "sensors" data as pandas dataframe..')
             df: pd.DataFrame = dBOperations().getDataAsDataFrame()
             lg.info("dataframe fetched!")
@@ -46,7 +46,7 @@ class DataIngestion:
                 path_or_buf=self.data_ingestion_config.feature_store_file_path, index=None)
             lg.info('"sensors" dataframe exported successfully!')
 
-            ######################## TRAINING-TEST SPLIT ########################################################
+            ###################################### TRAINING-TEST SPLIT #########################################
             lg.info('Splitting the data into training and test subsets..')
             training_set, test_set = train_test_split(
                 df, test_size=self.data_ingestion_config.test_size, random_state=self.data_ingestion_config.random_state)
@@ -66,7 +66,7 @@ class DataIngestion:
                 path_or_buf=self.data_ingestion_config.training_file_path, index=None)
             lg.info("test and training subsets saved succesfully!")
             
-            ###################### Saving Artifacts Config ######################################################
+            #################################### Saving Artifacts Config #######################################
             data_ingestion_artifact = DataIngestionArtifact(
                 feature_store_file=self.data_ingestion_config.feature_store_file_path,
                 training_file_path=self.data_ingestion_config.training_file_path,

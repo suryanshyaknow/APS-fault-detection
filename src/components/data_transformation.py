@@ -40,7 +40,7 @@ class DataTransformation:
             Pipeline: Custom Pipeline for the numerical features of the said dataset. 
         """
         try:
-            ########################## Pipeline for Numerical Atts ############################################
+            ################################# Pipeline for Numerical Atts #####################################
             simple_imputer = SimpleImputer(strategy="constant", fill_value=0)
             robust_scaler = RobustScaler()
             transformer = Pipeline(
@@ -86,7 +86,7 @@ class DataTransformation:
         try:
             lg.info(f"\n{'='*27} DATA TRANSFORMATION {'='*40}")
 
-            ########################### Fetch the Training and Test datasets ###################################
+            ############################# Fetch the Training and Test datasets ################################
             lg.info("fetching the training and test sets for transformation..")
             training_set = pd.read_csv(
                 self.data_ingestion_artifact.training_file_path)
@@ -99,7 +99,7 @@ class DataTransformation:
             X_test, y_test = BasicUtils.get_features_and_labels(
                 df=test_set, target=[self.target], desc="Test set")
 
-            ###################### Transformation using Transformer and Encoder ################################
+            ######################### Transformation using Transformer and Encoder ############################
             # fetch the transformer and fit to the training set
             lg.info("fetching the transformer..")
             lg.info("fitting the transformer to the Training set's features..")
@@ -125,7 +125,7 @@ class DataTransformation:
             lg.info("Encoding Target column of the test set..")
             y_test_encoded = target_enc.transform(y_test)
 
-            ######################## Save the Transformer and the TargetEncoder ################################
+            ########################## Save the Transformer and the TargetEncoder #############################
             # Saving the Transformer
             BasicUtils.save_object(
                 file_path=self.data_transformation_config.transformer_path,
@@ -137,7 +137,7 @@ class DataTransformation:
                 obj=target_enc,
                 obj_desc="target encoder")
 
-            ############################# Resampling of Training Instances #####################################
+            ############################### Resampling of Training Instances ##################################
             lg.info(
                 "Resampling the training instances as our target attribute is highly imbalanced..")
             lg.info(
@@ -149,7 +149,7 @@ class DataTransformation:
 
             lg.info("..resampling of training instances is done successfully!")
 
-            ######################### Configure Training and Test arrays #######################################
+            ############################# Configure Training and Test arrays ##################################
             training_arr_res = np.c_[X_train_res, y_train_res]
             lg.info(
                 f"After Resampling, shape of the `training set`: {training_arr_res.shape}")
@@ -157,7 +157,7 @@ class DataTransformation:
             lg.info(
                 f"Configured the training and test arrays successfully!")
 
-            ################### Save Training and Test arrays ##################################################
+            ################################ Save Training and Test arrays ####################################
             # Saving the Training Array
             BasicUtils.save_numpy_array(
                 file_path=self.data_transformation_config.transformed_training_file_path,
@@ -171,7 +171,7 @@ class DataTransformation:
                 desc="Test"
             )
 
-            ########################## Save Artifacts Config ###################################################
+            ##################################### Save Artifacts Config #######################################
             transformation_artifact = DataTransformationArtifact(
                 transformer_path=self.data_transformation_config.transformer_path,
                 target_encoder_path=self.data_transformation_config.target_encoder_path,

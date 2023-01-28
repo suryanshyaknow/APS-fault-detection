@@ -87,7 +87,7 @@ class ModelPushing:
             BasicUtils.save_object(
                 file_path=latest_model_dir, obj=model, obj_desc="trained Model")
 
-            ############################# Save Artifacts Config ################################################
+            ################################# Save Artifacts Config ###########################################
             model_pushing_artifact = ModelPushingArtifact(
                 pushed_model_dir=self.model_pushing_config.to_be_pushed_model_path,
                 saved_model_dir=latest_model_dir)
