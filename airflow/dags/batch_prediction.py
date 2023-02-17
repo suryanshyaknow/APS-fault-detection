@@ -11,7 +11,7 @@ with DAG(
     default_args={'retries': 2},
     description='APS-fault-detection',
     schedule_interval="@weekly",
-    start_date=pendulum.datetime(2022, 12, 11, tz="UTC"),
+    start_date=pendulum.datetime(2023, 2, 17, tz="UTC"),
     catchup=False,
     tags=['batch_prediction']
 ) as dag:
