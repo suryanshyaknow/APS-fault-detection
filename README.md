@@ -191,7 +191,8 @@ $ tar xzf ./actions-runner-linux-x64-2.301.1.tar.gz
 
 ```
 # Create the runner and start the configuration experience
-$ ./config.sh --url https://github.com/suryanshyaknow/APS-fault-detection --token APNAENNPAOWALIWWN55VAELD2BO4A# Last step, run it!
+$ ./config.sh --url https://github.com/suryanshyaknow/APS-fault-detection --token APNAENNPAOWALIWWN55VAELD2BO4A
+# Last step, run it!
 $ ./run.sh
 ```
 **NOTE:** Upon the successful addition of the runner, when it's being asked on the terminal the name of the runner, enter `self-hosted`.
